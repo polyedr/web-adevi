@@ -1,0 +1,34 @@
+.main {
+  position: fixed;
+  top: 0;
+  display: flex;
+  height: $header_height;
+  width: 100%;
+  align-items: center;
+  padding-left: 24px;
+  background-color: #fff;
+  border-bottom: 1px solid $gainsboro;
+}
+
+.btn_minLPanel {
+  width: 38px;
+  height: 24px;
+  background-color: #1ab394;
+  border-radius: 4px;
+  text-align: center;
+  cursor: pointer;
+
+  & i {
+    color: #fff;
+  }
+
+}
+
+input {
+  margin-left: 8px;
+  font-size: 14px;
+  border: none;
+  outline: none;
+  font-weight: 500;
+  color: #676a6c;
+}
