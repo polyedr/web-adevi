@@ -11,6 +11,10 @@ input {
   margin: 0;
 }
 
+button {
+  outline: none;
+}
+
 .app {
    position: relative;
    overflow: hidden;
@@ -28,6 +32,8 @@ input {
 
 .container {
   padding-left: $leftPanel_fullWidth;
+  padding-top: $header_height;
+
   flex: 1;
   transition: all 0.3s ease;
 }
