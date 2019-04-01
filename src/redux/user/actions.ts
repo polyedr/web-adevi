@@ -1,4 +1,3 @@
-import { USER_ACTIONS } from "$redux/user/constants";
+import TYPES from '$redux/constants';
 
-export const someAction = () => ({ type: USER_ACTIONS.SOME_ACTION });
-export const changeMinLPanel = () => ({ type: USER_ACTIONS.CHANGE_L_PANEL });
+export const changeMinLPanel = () => ({ type: TYPES.CHANGE_L_PANEL });

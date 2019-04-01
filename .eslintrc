@@ -1,64 +1,69 @@
 {
-  "extends": ["airbnb", "plugin:@typescript-eslint/recommended"],
-  "parser": "@typescript-eslint/parser",
+  "extends": [
+    "airbnb"
+  ],
+  "parser": "typescript-eslint-parser",
   "parserOptions": {
     "project": "./tsconfig.json",
-    "sourceType": "module"
+    "tsconfigRootDir": "."
+  },
+  "env": {
+    "browser": true
   },
   "plugins": [
-    "@typescript-eslint",
+    "typescript",
     "react",
     "jsx-a11y",
     "import"
   ],
+  "rules": {
+    "no-console": 1,
+    "class-methods-use-this": [1],
+    "import/named": "off",
+    "import/export": "off",
+    "import/prefer-default-export": "off", // Allow single Named-export
+    "no-unused-expressions": ["warn", {
+      "allowShortCircuit": true,
+      "allowTernary": true
+    }],
+    "@typescript-eslint/prefer-interface": "off", // also want to use "type"
+    "@typescript-eslint/explicit-function-return-type": "off", // annoying to force return type
+    "react/jsx-filename-extension": ["warn", {
+      "extensions": [".jsx", ".tsx"]
+    }], // also want to use with ".tsx"
+    "react/prop-types": "off", // Is this incompatible with TS props type?
+    "jsx-a11y/no-static-element-interactions": 0,
+    "jsx-a11y/click-events-have-key-events": 0,
+    "jsx-a11y/interactive-supports-focus": 0
+  },
   "settings": {
     "import/resolver": {
-      "node": {
-        "extensions": [".js", ".jsx", ".ts", ".tsx"]
+      "webpack": {
+        "webpack.config.js": {
+          "resolve": {
+            "alias": {
+              "$components": "src/components",
+              "$containers": "src/containers",
+              "$constants": "src/constants",
+              "$sprites": "src/sprites",
+              "$styles": "src/styles",
+              "$redux": "src/redux",
+              "$utils": "src/utils"
+            },
+            "extensions": [
+              ".js",
+              ".jsx",
+              "ts",
+              "tsx",
+              ".scss"
+            ],
+            "modules": [
+              "src",
+              "node_modules"
+            ]
+          }
+        }
       }
     }
-  },
-  "rules": {
-    "react/jsx-filename-extension": [
-      1,
-      {
-        "extensions": [
-          ".jsx",
-          ".tsx"
-        ]
-      }
-    ]
-  },
-  "overrides": [
-    {
-      "files": [
-        "*.ts",
-        "*.tsx"
-      ],
-      "rules": {
-        "comma-dangle": 0,
-        "no-restricted-syntax": 1,
-        "new-cap": 1,
-        "no-continue": 1,
-        "no-underscore-dangle": 1,
-        "global-require": 1,
-        "react/no-multi-comp": 1,
-        "camelcase": 1,
-        "import/no-unresolved": 1,
-        "import/prefer-default-export": 1,
-        "import/extensions": 1,
-        "no-return-assign": 1,
-        "max-len": 1,
-        "jsx-a11y/no-static-element-interactions": 0,
-        "jsx-a11y/click-events-have-key-events": 0,
-        "jsx-a11y/interactive-supports-focus": 0
-      }
-    }
-  ],
-  "globals": {
-    "document": false,
-    "window": false,
-    "HTMLInputElement": false,
-    "HTMLDivElement": false
   }
 }

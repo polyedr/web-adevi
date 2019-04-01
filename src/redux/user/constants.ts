@@ -1,4 +1,0 @@
-export const USER_ACTIONS = {
-  CHANGE_L_PANEL: 'CHANGE_L_PANEL',
-  SOME_ACTION: 'SOME_ACTION',
-};

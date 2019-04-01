@@ -1,4 +1,3 @@
-// import webpack from 'webpack';
 const webpack = require('webpack');
 const HtmlWebPackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
@@ -16,7 +15,7 @@ const htmlPlugin = new HtmlWebPackPlugin({
 
 const miniCssExractPlugin = new MiniCssExtractPlugin({
   filename: '[name].css',
-  chunkFilename: '[id].css'
+  chunkFilename: '[id].css',
 });
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
@@ -34,7 +33,7 @@ const resolve = {
     $redux: join(__dirname, 'src/redux'),
     $utils: join(__dirname, 'src/utils'),
   },
-  extensions: ['*', '.ts', '.tsx', '.js', '.jsx', '.json']
+  extensions: ['*', '.ts', '.tsx', '.js', '.jsx', '.json'],
 };
 
 /* Configuration */
@@ -52,15 +51,16 @@ module.exports = () => {
       rules: [
         {
           test: /\.css$/,
-          use: [
-            { loader: 'style-loader' },
-            { loader: 'css-loader' }
-          ]
+          use: [{ loader: 'style-loader' }, { loader: 'css-loader' }],
         },
         {
           test: /\.less$/,
           use: [
-            { loader: isDevelopment ? 'style-loader' : MiniCssExtractPlugin.loader },
+            {
+              loader: isDevelopment
+                ? 'style-loader'
+                : MiniCssExtractPlugin.loader,
+            },
             // { loader: 'css-loader' },
             {
               loader: 'css-loader',
@@ -68,16 +68,20 @@ module.exports = () => {
                 modules: true,
                 sourceMap: true,
                 importLoaders: 2,
-                localIdentName: '[name]__[local]__[hash:base64:5]'
-              }
+                localIdentName: '[name]__[local]__[hash:base64:5]',
+              },
             },
-            { loader: 'less-loader' }
-          ]
+            { loader: 'less-loader' },
+          ],
         },
         {
           test: /\.scss$/,
           use: [
-            { loader: isDevelopment ? 'style-loader' : MiniCssExtractPlugin.loader },
+            {
+              loader: isDevelopment
+                ? 'style-loader'
+                : MiniCssExtractPlugin.loader,
+            },
             // { loader: 'css-loader' },
             {
               loader: 'css-loader',
@@ -85,8 +89,8 @@ module.exports = () => {
                 modules: true,
                 sourceMap: true,
                 importLoaders: 2,
-                localIdentName: '[name]__[local]__[hash:base64:5]'
-              }
+                localIdentName: '[name]__[local]__[hash:base64:5]',
+              },
             },
             { loader: 'sass-loader' },
             {
@@ -95,14 +99,14 @@ module.exports = () => {
                 resources: ['src/styles/variables.scss'],
               },
             },
-          ]
+          ],
         },
         {
           test: /\.(ts|tsx|js|jsx)$/,
           exclude: /node_modules/,
           use: {
-            loader: 'babel-loader'
-          }
+            loader: 'babel-loader',
+          },
         },
         { test: /\.(ts|tsx)?$/, loader: 'awesome-typescript-loader' },
         {
@@ -111,18 +115,18 @@ module.exports = () => {
             loader: 'file-loader',
             options: {
               name: '[name].[ext]',
-              outputPath: 'fonts/'
-            }
-          }
+              outputPath: 'fonts/',
+            },
+          },
         },
         {
           test: /\.(png|svg)$/,
           use: {
             loader: 'file-loader',
-            options: {}
-          }
-        }
-      ]
+            options: {},
+          },
+        },
+      ],
     },
     devtool,
     resolve,
@@ -150,18 +154,18 @@ module.exports = () => {
             minChunks: 2,
             minSize: 0,
             reuseExistingChunk: true,
-          }
-        }
+          },
+        },
       },
       minimizer: [
         new UglifyJsPlugin({
           cache: true,
           parallel: true,
-          sourceMap: true // set to true if you want JS source maps
+          sourceMap: true, // set to true if you want JS source maps
         }),
-        new OptimizeCSSAssetsPlugin({})
+        new OptimizeCSSAssetsPlugin({}),
       ],
-      occurrenceOrder: true // To keep filename consistent between different modes (for example building only)
+      occurrenceOrder: true, // To keep filename consistent between different modes (for example building only)
     },
     devServer: {
       historyApiFallback: true,
@@ -170,7 +174,6 @@ module.exports = () => {
       contentBase: 'dist',
       publicPath: '/',
       hot: true,
-    }
+    },
   };
 };
-

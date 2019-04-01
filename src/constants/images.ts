@@ -3,7 +3,7 @@ export interface IImages {
 }
 
 export const IMAGES = {
-    default: null,
-    prof: require('../sprites/profile_empty.png'),
-    logo: require('../sprites/logo.png'),
+  default: null,
+  prof: require('../sprites/profile_empty.png'),
+  logo: require('../sprites/logo.png'),
 };
