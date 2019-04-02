@@ -101,8 +101,6 @@ class Dashboard extends React.Component<IDashboardProps, IDashboardState> {
       },
     } = this;
 
-    console.log(selectAll);
-
     return (
       <main className={styles.main}>
         <div className={styles.wrapper}>

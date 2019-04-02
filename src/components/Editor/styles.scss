@@ -1,71 +1,67 @@
 .main {
+  padding: 26px;
 
-  .projectSection {
-    padding: 26px;
-
-    .titleProject {
-      padding: 16px 0;
-      background-color: $white;
-      border-bottom: 1px solid $gainsboro;
-      text-align: center;
-    }
-
-    .screenProject, .addScreen {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 16px 0;
-      height: 150px;
-      width: 114px;
-    }
-
-    .screenProject {
-      background-color: $white;
-    }
-
-    .addScreen {
-
-      button {
-        border: none;
-        cursor: pointer;
-      }
-
-      .icoAddScreen {
-        font-size: 56px;
-        color: #e2e3e3;
-      }
-    }
+  .titleProject {
+    padding: 16px 0;
+    background-color: $white;
+    border-bottom: 1px solid $gainsboro;
+    text-align: center;
   }
 
-
-  .modal__body {
+  .addScreensProject, .addScreen {
     display: flex;
-    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 16px 0;
+    height: 150px;
+    width: 114px;
+  }
 
-    .icoAddScreen {
-      text-align: center;
-      user-select: none;
+  .addScreensProject {
+    background-color: $white;
+  }
+
+  .addScreen {
+
+    button {
+      border: none;
+      cursor: pointer;
     }
 
-    .screenName {
-      box-sizing: border-box;
-      width: 100%;
-      margin: 4px 0;
-      padding: 6px 12px;
-      border: 1px solid $gainsboro;
-      border-radius: 2px;
+    .btnAddScreen > svg * {
+      fill: #e2e3e3;
     }
+  }
+}
 
-    p {
-      margin-top: 4px;
-      font-size: 12px;
-      text-align: left;
-      color: $brightRed;
-    }
 
-    .browseImg {
-      margin-top: 16px;
-      padding: 4px;
-    }
+.modal__body {
+  display: flex;
+  flex-direction: column;
+
+  .icoAddScreen {
+    text-align: center;
+    user-select: none;
+  }
+
+  .screenName {
+    box-sizing: border-box;
+    width: 100%;
+    margin: 4px 0;
+    padding: 6px 12px;
+    border: 1px solid $gainsboro;
+    border-radius: 2px;
+  }
+
+  p {
+    margin-top: 4px;
+    font-size: 12px;
+    text-align: left;
+    color: $brightRed;
+  }
+
+  .browseImg {
+    margin-top: 16px;
+    padding: 4px;
   }
 }

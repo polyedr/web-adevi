@@ -1,8 +1,8 @@
 import * as React from 'react';
-import classNames from 'classnames';
 
 import { IProject } from '$constants/interface';
 import Modal from '$components/utility/Modal';
+import { Icon } from '$components/utility/Icon';
 
 const styles = require('./styles.scss');
 
@@ -82,12 +82,12 @@ class Project extends React.Component<IProjectProps, IProjectState> {
     } = this;
 
     return (
-      <div className={styles.main}>
-        <div className={styles.projectSection}>
+      <React.Fragment>
+        <div className={styles.main}>
           <div className={styles.titleProject}>
             <p>{project.name}</p>
           </div>
-          <div className={styles.screenProject}>
+          <div className={styles.addScreensProject}>
             {project.projectScreens.map(screen => (
               <div key={screen.id}>
                 <p>screen.name</p>
@@ -95,14 +95,18 @@ class Project extends React.Component<IProjectProps, IProjectState> {
               </div>
             ))}
             <div className={styles.addScreen}>
-              <button onClick={this.openModal} type="button">
-                <i className={classNames('material-icons', styles.icoAddScreen)}>
-                add_to_queue
-                </i>
+              <button className={styles.btnAddScreen} onClick={this.openModal} type="button">
+                <Icon icon="addScreen" size={48} />
               </button>
             </div>
           </div>
-
+          <div className={styles.screenSection}>
+            <div className={styles.navBar}>
+              <div className={styles.navBarTypeScreen}>
+                <Icon icon="table" />
+              </div>
+            </div>
+          </div>
         </div>
         { modalOpen
         && (
@@ -124,6 +128,11 @@ class Project extends React.Component<IProjectProps, IProjectState> {
               {modalMsgDanger
                 && <p>{modalMsgDanger}</p>
               }
+
+              <div>
+                <input type="" />
+              </div>
+
               <input
                 className={styles.browseImg}
                 type="file"
@@ -133,7 +142,7 @@ class Project extends React.Component<IProjectProps, IProjectState> {
           </Modal>
         )
         }
-      </div>
+      </React.Fragment>
     );
   }
 }
