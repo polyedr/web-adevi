@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 import Button from '$components/utility/Button';
 import Modal from '$components/utility/Modal';
-import { IProject } from '$constants/interface';
+import { IProject } from '$redux/project/reducer';
 
 const styles = require('./styles.scss');
 
@@ -158,7 +158,7 @@ class Dashboard extends React.Component<IDashboardProps, IDashboardState> {
                       {item.status}
                     </td>
                     <td>
-                      <Link to={`/design/:${item.id}`}>
+                      <Link to={`/design/${item.id}`}>
                         {item.name}
                       </Link>
                     </td>
@@ -166,7 +166,7 @@ class Dashboard extends React.Component<IDashboardProps, IDashboardState> {
                       {item.countScreens}
                     </td>
                     <td>
-                      { item.projectScreens.map(screen => (
+                      { item.screens.map(screen => (
                         <a href={screen.previewUrl} key={screen.id}>
                           <img className="img-circle" src={screen.imageUrl} alt=" " />
                         </a>

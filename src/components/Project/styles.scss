@@ -1,0 +1,132 @@
+.main {
+  padding: 26px;
+
+  .titleProject {
+    padding: 16px 0;
+    background-color: $white;
+    border-bottom: 1px solid $gainsboro;
+    text-align: center;
+  }
+
+  .screensSection {
+    background-color: $white;
+    display: flex;
+    flex-wrap: wrap;
+
+    .screensBlock, .addScreen {
+      margin: 0 6px;
+      height: 150px;
+      width: 114px;
+    }
+
+    .screensBlock {
+      position: relative;
+
+      .titleScreen {
+        & > p {
+          text-align: center;
+          padding: 8px 0;
+          user-select: none;
+        }
+
+        & button {
+          position: absolute;
+          right: 4px;
+          top: 0;
+
+          padding: 0;
+          margin: 0;
+
+          opacity: 0;
+
+          & svg * {
+            fill: $red;
+          }
+        }
+
+      }
+
+      &:hover > .titleScreen button {
+        opacity: 1;
+        cursor: pointer;
+      }
+
+      .previewScreen {
+        position: relative;
+        height: 100%;
+        cursor: pointer;
+        border: 1px solid $dodgerBlue;
+        border-radius: 4px;
+
+        button {
+          position: absolute;
+          left: 50%;
+          top: 50%;
+          transform: translate(-50%, -50%);
+          opacity: 0;
+
+          & svg * {
+            fill: $almostBlack;
+          }
+        }
+
+        &:hover {
+          background-color: $matteTurq;
+          button {
+            opacity: 1;
+          }
+        }
+      }
+    }
+
+    .addScreen {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 32px 6px 8px;
+      border: 1px solid $dodgerBlue;
+      border-radius: 4px;
+
+      button {
+        border: none;
+        cursor: pointer;
+      }
+
+      .btnAddScreen > svg * {
+        fill: #e2e3e3;
+      }
+    }
+  }
+}
+
+
+.modal__body {
+  display: flex;
+  flex-direction: column;
+
+  .icoAddScreen {
+    text-align: center;
+    user-select: none;
+  }
+
+  .screenName {
+    box-sizing: border-box;
+    width: 100%;
+    margin: 4px 0;
+    padding: 6px 12px;
+    border: 1px solid $gainsboro;
+    border-radius: 2px;
+  }
+
+  p {
+    margin-top: 4px;
+    font-size: 12px;
+    text-align: left;
+    color: $brightRed;
+  }
+
+  .browseImg {
+    margin-top: 16px;
+    padding: 4px;
+  }
+}

@@ -5,7 +5,7 @@ import { hot } from 'react-hot-loader';
 
 import * as actions from '$redux/project/actions';
 import Dashboard from '$components/Dashboard';
-import { IProject } from '$constants/interface';
+import { IProject } from '$redux/project/reducer';
 
 interface IDashboardProps {
   projects: IProject[],

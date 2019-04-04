@@ -8,7 +8,7 @@ const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const htmlPlugin = new HtmlWebPackPlugin({
   template: './src/index.html',
   filename: './index.html',
-  title: 'Empty React Editor',
+  title: 'Editor',
   hash: false,
   // favicon: 'src/sprites/favicon.png',
 });
@@ -168,12 +168,12 @@ module.exports = () => {
       occurrenceOrder: true, // To keep filename consistent between different modes (for example building only)
     },
     devServer: {
-      historyApiFallback: true,
       port: 8080,
       // host: '192.168.88.11',
+      hot: true,
       contentBase: 'dist',
       publicPath: '/',
-      hot: true,
+      historyApiFallback: true,
     },
   };
 };

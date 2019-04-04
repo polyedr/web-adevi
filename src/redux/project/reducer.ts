@@ -2,7 +2,24 @@ import { createReducer } from 'reduxsauce';
 
 import * as ACTIONS from '$redux/project/actions';
 import TYPES from '$redux/constants';
-import { IProject } from '$constants/interface';
+
+
+export interface IProjectScreen {
+  id: string,
+  name: string,
+  screenData: any,
+  previewUrl: string,
+  imageUrl: string,
+}
+
+export interface IProject {
+  id: string,
+  status: string,
+  name: string,
+  countScreens: number,
+  screens: IProjectScreen[],
+  select: boolean,
+}
 
 export type IRootState = Readonly<{
     projects: IProject[],
@@ -25,11 +42,17 @@ const HANDLERS = {
 
 const INITIAL_STATE: IRootState = {
   projects: [{
-    id: '2990.00ff43933',
+    id: '299000ff43933',
     status: 'pending',
     name: 'test',
     countScreens: 0,
-    projectScreens: [],
+    screens: [{
+      id: 's-1554270037862',
+      name: 'asd',
+      previewUrl: '',
+      imageUrl: '',
+      screenData: null,
+    }],
     select: false,
   }],
 };

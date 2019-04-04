@@ -15,8 +15,17 @@ export const setProjects = projects => ({
   projects,
 });
 
+export const dellScreen = (projectId, screenId) => ({
+  type: TYPES.DEL_SCREEN,
+  payload: { projectId, screenId },
+});
 
-export const addScreen = (name, fileData) => ({
-  type: TYPES.ADD_SCREEN,
+export const addScreenImg = (projectId, name, fileData) => ({
+  type: TYPES.ADD_SCREEN_IMG,
   payload: { name, fileData },
+});
+
+export const addScreenEmpty = (projectId, name) => ({
+  type: TYPES.ADD_SCREEN_EMPTY,
+  payload: { projectId, name },
 });

@@ -11,7 +11,7 @@ import * as actions from '$redux/user/actions';
 import LeftPanel from '$components/LeftPanel';
 import TopPanel from '$components/TopPanel';
 import DashboardLogic from '$containers/DashboardLogic';
-import Design from '$containers/EditorLogic';
+import Design from '$containers/ProjectLogic';
 
 const styles = require('$styles/global.scss');
 
@@ -55,7 +55,6 @@ class Component extends React.Component<IAppProps, IAppState> {
                 path="/design/:projectId"
                 component={Design}
               />
-              <Redirect from="/design" to="/dashboard" />
               <Redirect from="/*" to="/dashboard" />
             </Switch>
           </div>

@@ -6,7 +6,7 @@ interface IProps {
 }
 
 export const Icon: React.FunctionComponent<IProps> = ({ icon, size = 24 }) => (
-  <svg width={size} height={size} viewBox="0 0 32 32">
+  <svg width={size} height={size} viewBox="0 0 24 24">
     <defs>
       <mask id={`icon-mask-${icon}`}>
         <use xlinkHref={`${require('$sprites/icons.svg')}#icon-${icon}`} x={0} y={0} />

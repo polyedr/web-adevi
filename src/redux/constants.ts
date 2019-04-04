@@ -10,5 +10,7 @@ export default createTypes({
   SET_PROJECTS: null,
 
   // Screen actions
-  ADD_SCREEN: null,
+  DEL_SCREEN: null,
+  ADD_SCREEN_IMG: null,
+  ADD_SCREEN_EMPTY: null,
 });
