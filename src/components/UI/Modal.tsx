@@ -1,7 +1,7 @@
 import * as React from 'react';
 import classNames from 'classnames';
 
-import Button from '$components/utility/Button';
+import Button from '$components/UI/Button';
 
 const styles = require('./styles.scss');
 

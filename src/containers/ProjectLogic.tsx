@@ -19,6 +19,7 @@ interface IDesignProps {
   dellScreen(projectId: string, screenId: string): void,
   addScreenImg(projectId: string, name: string, fileData: File): void,
   addScreenEmpty(projectId: string, name: string): void,
+  getScreenData(projectId: string, screenId: string): void,
 }
 
 interface IDesignState {
@@ -31,6 +32,7 @@ const ProjectLogic: React.FunctionComponent<IDesignProps> = (props) => {
     dellScreen,
     addScreenEmpty,
     addScreenImg,
+    getScreenData,
     match: { params: { projectId } },
   } = props;
 
@@ -46,6 +48,7 @@ const ProjectLogic: React.FunctionComponent<IDesignProps> = (props) => {
       dellScreen={dellScreen}
       addScreenEmpty={addScreenEmpty}
       addScreenImg={addScreenImg}
+      getScreenData={getScreenData}
     />
   );
 };

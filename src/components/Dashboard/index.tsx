@@ -2,8 +2,8 @@ import * as React from 'react';
 import classNames from 'classnames';
 import { Link } from 'react-router-dom';
 
-import Button from '$components/utility/Button';
-import Modal from '$components/utility/Modal';
+import Button from '$components/UI/Button';
+import Modal from '$components/UI/Modal';
 import { IProject } from '$redux/project/reducer';
 
 const styles = require('./styles.scss');

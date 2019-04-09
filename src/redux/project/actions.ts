@@ -29,3 +29,13 @@ export const addScreenEmpty = (projectId, name) => ({
   type: TYPES.ADD_SCREEN_EMPTY,
   payload: { projectId, name },
 });
+
+export const getScreenData = (projectId, screenId) => ({
+  type: TYPES.GET_SCREEN_DATA,
+  payload: { projectId, screenId },
+});
+
+export const setScreenData = (projectId, screenData) => ({
+  type: TYPES.SET_SCREEN_DATA,
+  payload: { projectId, screenData },
+});

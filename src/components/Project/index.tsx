@@ -1,8 +1,8 @@
 import * as React from 'react';
 
-import Modal from '$components/utility/Modal';
-import { Icon } from '$components/utility/Icon';
-import Button from '$components/utility/Button';
+import Modal from '$components/UI/Modal';
+import { Icon } from '$components/UI/Icon';
+import Button from '$components/UI/Button';
 import Editor from '$components/Editor';
 import { IProject, IProjectScreen } from '$redux/project/reducer';
 
@@ -13,13 +13,15 @@ interface IProjectProps {
   dellScreen(projectId: string, screenId: string): void,
   addScreenImg(projectId: string, name: string, fileData: File): void,
   addScreenEmpty(projectId: string, name: string): void,
+  getScreenData(projectId: string, screenId: string): void,
 }
 
 interface IProjectState {
   screenName: string,
   modalOpen: boolean,
   modalMsgDanger: string,
-  screenData: IProjectScreen,
+  screenId: string,
+  // screenData: IProjectScreen,
 }
 
 class Project extends React.Component<IProjectProps, IProjectState> {
@@ -27,8 +29,20 @@ class Project extends React.Component<IProjectProps, IProjectState> {
     screenName: '',
     modalOpen: false,
     modalMsgDanger: '',
-    screenData: null,
+    screenId: null,
+    // screenData: null,
   };
+
+  // componentWillReceiveProps({ project }) {
+  //   const { screenId } = this.state;
+  //
+  //   if (screenId) {
+  //     const screenData: IProjectScreen = project.screens.find(screen => screen.id === screenId);
+  //     if (screenData) {
+  //       this.setState({ screenData });
+  //     }
+  //   }
+  // }
 
   openModal = () => {
     this.setState({ modalOpen: true });
@@ -69,12 +83,10 @@ class Project extends React.Component<IProjectProps, IProjectState> {
   }
 
   handleEditScreen(id) {
-    const { project } = this.props;
-    const screenData:IProjectScreen = project.screens.find(screen => screen.id === id);
+    const { project, getScreenData } = this.props;
 
-    if (screenData) {
-      this.setState({ screenData });
-    }
+    getScreenData(project.id, id);
+    this.setState({ screenId: id });
   }
 
   render() {
@@ -84,9 +96,11 @@ class Project extends React.Component<IProjectProps, IProjectState> {
         modalOpen,
         screenName,
         modalMsgDanger,
-        screenData,
+        screenId,
       },
     } = this;
+
+    const selectScreen:IProjectScreen = project.screens.find(s => s.id === screenId);
 
     return (
       <React.Fragment>
@@ -119,7 +133,7 @@ class Project extends React.Component<IProjectProps, IProjectState> {
           </div>
         </div>
         <Editor
-          screenData={screenData}
+          screen={selectScreen}
         />
         { modalOpen
         && (

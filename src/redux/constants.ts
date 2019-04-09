@@ -13,4 +13,6 @@ export default createTypes({
   DEL_SCREEN: null,
   ADD_SCREEN_IMG: null,
   ADD_SCREEN_EMPTY: null,
+  GET_SCREEN_DATA: null,
+  SET_SCREEN_DATA: null,
 });

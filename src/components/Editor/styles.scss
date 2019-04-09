@@ -25,13 +25,16 @@
     max-width: 100vw;
     overflow-x: auto;
 
-    .board {
-      display: grid;
-      grid-gap: 4px;
+    .groupItem {
+      //display: grid;
+      //grid-gap: 4px;
+      //
+      //grid-template-columns: 1fr;
+      //grid-template-rows: minmax(12px, max-content);
+      //grid-auto-columns: 1fr;
+      //grid-auto-rows: minmax(100px, auto);
 
-      grid-template-columns: repeat(12, [col-start] auto [col-end]);
-      grid-template-rows: repeat(12, minmax(8px, max-content));
-
+      margin: 8px 0;
       //grid-column-gap: 16px;
       //column-gap: 16px;
       //grid-row-gap: 16px;
@@ -40,19 +43,45 @@
 
     .item {
       //position: absolute;
-      width: calc(100% / 12);
-      height: 10px;
+      //width: calc(100% / 12);
+      //height: 12px;
       padding: 4px 0 2px;
+      margin: 4px;
       border-radius: 3px;
       text-align: center;
       user-select: none;
       cursor: grab;
+      border-radius: 3px;
+      background: rgba(255, 255, 255, 0.75);
+      box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2);
       transition: background-color 0.1s ease-in-out;
 
-      &.isActive {
-        background: rgba(255, 255, 255, 0.9);
-        cursor: grabbing;
-      }
     }
+  }
+
+  :global(.block, .group, .elem) {
+    user-select: none;
+    cursor: move;
+  }
+  :global(.block) {
+    margin-bottom: 8px;
+    background-color: #efe5fd;
+  }
+  :global(.group) {
+    margin: 0 8px 8px;
+    background-color: #D7CCC8;
+  }
+
+  :global(.elem) {
+    margin: 4px;
+    background-color: #FBE9E7;
+  }
+
+  :global(.vertical, .horizontal) {
+    display: flex;
+  }
+
+  :global(.vertical) {
+    flex-direction: column;
   }
 }
