@@ -1,5 +1,4 @@
 import * as React from 'react';
-import classNames from 'classnames';
 
 import { IProjectScreen } from '$redux/project/reducer';
 import { Icon } from '$components/UI/Icon';
@@ -18,22 +17,6 @@ interface IEditorState {
 
 class Editor extends React.Component<IEditorProps, IEditorState> {
   sortable = null; // sortable instance
-
-  state = {
-    // items: [1, 2, 3, 4, 5, 6, ['Apple', 'Banana', 'Cherry', 'Guava', 'Peach', 'Strawberry'], 7],
-  };
-
-  listItems(items, name) {
-    return items.map(val => (
-      <div
-        key={val}
-        data-id={val}
-        className={classNames(styles.item, styles[name])}
-      >
-        {val}
-      </div>
-    ));
-  }
 
   render() {
     const {
@@ -63,11 +46,16 @@ class Editor extends React.Component<IEditorProps, IEditorState> {
             right navPanel
           </div>
         </div>
-        <ScreenElements
-          el={screen && JSON.parse(screen.screenData)}
-          type="as"
-          styles={styles}
-        />
+        {screen
+          && <ScreenElements
+            id="aa"
+            items={JSON.parse(screen.screenData)}
+            path={[]}
+            depth={0}
+            type="root"
+            styles={styles}
+          />
+        }
       </div>
     );
   }

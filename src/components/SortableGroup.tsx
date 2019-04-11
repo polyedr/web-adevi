@@ -1,37 +1,54 @@
 import * as React from 'react';
 import * as Sortable from 'react-sortablejs';
 import classNames from 'classnames';
-import { IElement } from '$utils/renderDom';
 
 interface IProps {
   name:string,
   styles: any,
-  // listItems: any,
   children?: any,
-  // onChange: (items:any, sortable: any, evt: any) => void,
+  onUpdate: (parent: string, oldIndex: number, newIndex: number) => void,
+  onAdd: (fromParent: string, toParent: string, oldIndex: number, newIndex: number) => void,
+  onRemove: (parent: string, index: number) => void,
+  id: string,
 }
 
-interface IState {
-  items: IElement[],
-}
-
-class SortableGroup extends React.Component<IProps, IState> {
+class SortableGroup extends React.Component<IProps> {
   sortable = null;
 
-  state = {
-    items: this.props.children,
-  };
+  onUpdate = (event) => {
+    const { onAdd, onRemove, onUpdate } = this.props;
+    const { to, from, newIndex, oldIndex } = event;
 
-  onChange = (newList, sortable, evt) => {
-    // console.log({ newList, sortable, evt });
+    switch (event.type) {
+      case 'add':
+        onAdd(from.id, to.id, oldIndex, newIndex);
+        break;
+
+      case 'remove':
+        onRemove(from.id, oldIndex);
+        break;
+
+      case 'update':
+        onUpdate(from.id, oldIndex, newIndex);
+        break;
+
+      default: break;
+    }
   };
 
   render() {
-    const { name, styles } = this.props;
-    const { items } = this.state;
+    const {
+      id,
+      children,
+      name,
+      styles,
+    } = this.props;
+
+    if (!children) return null;
 
     return (
       <Sortable
+        id={id}
         className={classNames(styles.groupItem, styles[name])}
         // tag="ul" Defaults to "div"
         options={{
@@ -41,11 +58,9 @@ class SortableGroup extends React.Component<IProps, IState> {
             // pull: 'clone', //   возможность «вытаскивать» элементы при перемещении между списками, так же свойство может принимать значение `clone`
             put: true, //      возможность принять элемент из другой группы, либо массив разрешенных групп.
           },
-          onAdd: console.log,
-          // onRemove: console.log,
-          // onChoose: console.log,
-          // onMove: console.log,
-
+          onAdd: this.onUpdate,
+          onRemove: this.onUpdate,
+          onUpdate: this.onUpdate,
           // fallbackOnBody: true,
           // removeCloneOnHide: true,
           // scroll — включить авто-прокрутку;
@@ -57,9 +72,9 @@ class SortableGroup extends React.Component<IProps, IState> {
             this.sortable = c.sortable;
           }
         }}
-        onChange={this.onChange}
+        // onChange={console.log}
       >
-        {items || null}
+        {children || null}
       </Sortable>
     );
   }

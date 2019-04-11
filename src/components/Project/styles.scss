@@ -58,21 +58,21 @@
         border: 1px solid $dodgerBlue;
         border-radius: 4px;
 
-        button {
+        & svg {
           position: absolute;
           left: 50%;
           top: 50%;
           transform: translate(-50%, -50%);
           opacity: 0;
 
-          & svg * {
+          & * {
             fill: $almostBlack;
           }
         }
 
         &:hover {
           background-color: $matteTurq;
-          button {
+          svg {
             opacity: 1;
           }
         }

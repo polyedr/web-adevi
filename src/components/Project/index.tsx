@@ -117,11 +117,12 @@ class Project extends React.Component<IProjectProps, IProjectState> {
                     <Icon icon="del" size={24} />
                   </Button>
                 </div>
-                <div className={styles.previewScreen}>
+                <div
+                  className={styles.previewScreen}
+                  onClick={() => this.handleEditScreen(screen.id)}
+                >
                   <img src={screen.previewUrl} alt="screen" />
-                  <Button type="none" onClick={() => this.handleEditScreen(screen.id)}>
-                    <Icon icon="edit" size={48} />
-                  </Button>
+                  <Icon icon="edit" size={48} />
                 </div>
               </div>
             ))}

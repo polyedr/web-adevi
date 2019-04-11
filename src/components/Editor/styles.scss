@@ -59,9 +59,10 @@
     }
   }
 
-  :global(.block, .group, .elem) {
+  :global(.block), :global(.group), :global(.elem) {
     user-select: none;
     cursor: move;
+    padding: 5px;
   }
   :global(.block) {
     margin-bottom: 8px;

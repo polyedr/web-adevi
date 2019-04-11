@@ -8,21 +8,21 @@ export interface IElement {
 
 const renderBlock = ({ id, key, children }) => (
   <div className="block" key={key} data-id={id}>
-    {`block - ${id}`}
+    {id}
     {children || null}
   </div>
 );
 
 const renderGroup = ({ id, key, children }) => (
   <div className="group" key={key} data-id={id}>
-    {`group - ${id}`}
+    {id}
     {children || null}
   </div>
 );
 
 const renderElem = ({ id, key, children }) => (
-  <div className="el" key={key} data-id={id}>
-    {`el - ${id}`}
+  <div className="elem" key={key} data-id={id}>
+    {id}
     {children || null}
   </div>
 );

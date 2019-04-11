@@ -1,6 +1,7 @@
 import {
-  fork, takeLatest, put, select, call,
+  fork, takeLatest, put, select,
 } from 'redux-saga/effects';
+import { REHYDRATE } from 'redux-persist';
 // import { delay } from 'redux-saga';
 import * as R from 'ramda';
 
@@ -12,7 +13,11 @@ const jsonValue = '[{\"type\": \"block\", \"id\": 3, \"children\": [{\"orientati
 const idGenerator = () => (new Date().getTime());
 
 function* loadInitStart() {
-//  TODO: load api data
+  //  TODO: load api data
+}
+
+function* authCheckSaga() {
+// TODO: axios token + ...
 }
 
 function* createProject({ payload }) {
@@ -119,6 +124,7 @@ function* getScreenData({ payload }) {
 
 function* mySaga() {
   yield fork(loadInitStart);
+  // yield takeLatest(REHYDRATE, authCheckSaga);
 
   yield takeLatest(TYPES.CREATE_PROJECT, createProject);
   yield takeLatest(TYPES.DEL_PROJECT, delProject);

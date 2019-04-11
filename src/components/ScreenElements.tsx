@@ -1,52 +1,91 @@
 import * as React from 'react';
-import { RENDERERS } from '$utils/renderDom';
-import SortableGroup from '$components/SortableGroup';
+import * as R from 'ramda';
+
+import { TList, TListElement, getList, TListItem } from '$utils/parseListItems';
+import Recursive from '$components/Recursive';
+
 
 interface IProps {
-  el: {
-    id: string,
-    type: string
-    children: any,
-  }[],
+  id: string,
+  path?: string[],
   type: string,
-  depth?: number,
+  depth: number,
+  items: TListElement[],
   styles: any,
 }
 
-let ScreenElements = ({ el, depth = 0, styles }: IProps) => {
-  if (!el) return null;
+interface IState {
+  listItems: TList,
+}
 
-  return (
-    <SortableGroup
-      key={`sortable-${depth}`}
-      name="groupR"
-      styles={styles}
-    >
-      {
-        el.map((child) => {
-          const element = RENDERERS[child.type];
-          if (element) {
-            if (child.children && depth < 5) {
-              return element({
-                id: child.id,
-                key: `${child.type}-${child.id}-${depth}`,
-                children: <ScreenElements
-                  el={child.children}
-                  type={child.type}
-                  depth={depth + 1}
-                  styles={styles}
-                />,
-              });
-            }
+class ScreenElements extends React.Component<IProps, IState> {
+  constructor(props) {
+    super(props);
+    this.state = {
+      listItems: getList(props.items),
+    };
+  }
 
-            return element({ id: child.id, key: `${child.type}-${child.id}-${depth}` });
-          }
+  onUpdate = (parent: string, oldIndex: number, newIndex: number) => {
+    const { listItems } = this.state;
+    const el: string = listItems[parent].children[oldIndex];
+    const newList: string[] = R.insert(newIndex, el, R.without([el], listItems[parent].children));
 
-          return null;
-        })
-      }
-    </SortableGroup>
-  );
-};
+    this.setState(state => ({
+      ...state,
+      listItems: {
+        ...state.listItems,
+        [parent]: {
+          ...state.listItems[parent],
+          children: newList,
+        },
+      },
+    }));
+  };
 
-export default ScreenElements = React.memo(ScreenElements);
+  onAdd = (from, to, oldIndex, newIndex) => {
+    const { listItems } = this.state;
+    const el: string = listItems[from].children[oldIndex];
+    const newList: string[] = R.insert(newIndex, el, listItems[to].children);
+    const newItems: TListItem = { ...listItems[to], parent: to, children: newList };
+    const newListItems: TList = R.assoc(to, newItems, listItems);
+
+    this.setState(() => ({ listItems: newListItems }));
+  };
+
+  onRemove = (parent, index) => {
+    const { listItems } = this.state;
+    const newList: string[] = R.remove(index, 1, listItems[parent].children);
+
+    this.setState(state => ({
+      ...state,
+      listItems: {
+        ...state.listItems,
+        [parent]: {
+          ...state.listItems[parent],
+          children: newList,
+        },
+      },
+    }));
+  };
+
+  render() {
+    const {
+      props: { styles },
+      state: { listItems },
+    } = this;
+
+    return (
+      <Recursive
+        listItems={listItems}
+        item={listItems.root}
+        styles={styles}
+        onUpdate={this.onUpdate}
+        onAdd={this.onAdd}
+        onRemove={this.onRemove}
+      />
+    );
+  }
+}
+
+export default ScreenElements;
