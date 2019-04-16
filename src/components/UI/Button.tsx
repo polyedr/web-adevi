@@ -1,4 +1,5 @@
 import * as React from 'react';
+import classNames from 'classnames';
 
 const styles = require('./styles.scss');
 
@@ -14,10 +15,11 @@ interface IButtonProps {
   type?: string,
   disabled?: boolean,
   onClick: (e: any) => void
+  className?: string,
 }
 
 const Button: React.FunctionComponent<IButtonProps> = ({
-  children, type, disabled, onClick,
+  children, type, disabled, onClick, className = '',
 }) => {
   const props: any = {
     onClick,
@@ -27,7 +29,7 @@ const Button: React.FunctionComponent<IButtonProps> = ({
     type = 'confirm';
   }
 
-  props.className = `${styles.button} ${styles[type]}`;
+  props.className = classNames(styles.button, styles[type], className);
 
   if (disabled) props.disabled = 'disabled';
 

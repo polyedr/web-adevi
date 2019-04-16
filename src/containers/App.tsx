@@ -10,8 +10,8 @@ import { history } from '$redux/store';
 import * as actions from '$redux/user/actions';
 import LeftPanel from '$components/LeftPanel';
 import TopPanel from '$components/TopPanel';
-import DashboardLogic from '$containers/DashboardLogic';
-import Design from '$containers/ProjectLogic';
+import ProjectsLogic from '$containers/ProjectsLogic';
+import EditorLogic from '$containers/EditorLogic';
 
 const styles = require('$styles/global.scss');
 
@@ -48,14 +48,14 @@ class Component extends React.Component<IAppProps, IAppState> {
             />
             <Switch>
               <Route
-                path="/dashboard"
-                component={DashboardLogic}
+                path="/projects"
+                component={ProjectsLogic}
               />
               <Route
-                path="/design/:projectId"
-                component={Design}
+                path="/project/:projectId/"
+                component={EditorLogic}
               />
-              <Redirect from="/*" to="/dashboard" />
+              <Redirect from="/*" to="/projects" />
             </Switch>
           </div>
         </div>

@@ -2,6 +2,7 @@ import * as React from 'react';
 import { NavLink } from 'react-router-dom';
 
 import { IMAGES } from '$constants/images';
+import { Icon } from '$components/UI/Icon';
 
 const styles = require('./styles.scss');
 
@@ -32,8 +33,8 @@ const LeftPanel: React.FunctionComponent<ILeftPanel> = (props) => {
         )
       }
       <div className={styles.navigating}>
-        <NavLink exact to="/dashboard" activeClassName="active">
-          <i className="material-icons">dashboard</i>
+        <NavLink exact to="/projects" activeClassName="active">
+          <Icon icon="dashboard" />
           <span>My Projects</span>
         </NavLink>
         <NavLink to="/library" activeClassName="active">

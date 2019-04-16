@@ -4,25 +4,49 @@ import * as ACTIONS from '$redux/project/actions';
 import TYPES from '$redux/constants';
 
 
-export interface IProjectScreen {
-  id: string,
-  name: string,
-  screenData: any,
-  previewUrl: string,
-  imageUrl: string,
-}
-
-export interface IProject {
+export interface IListProject {
   id: string,
   status: string,
   name: string,
   countScreens: number,
-  screens: IProjectScreen[],
-  select: boolean,
+}
+
+export type TListElement = {
+  id: number,
+  type: string,
+  children: TListElement[],
+}
+
+export interface IProjectScreen {
+  id: string,
+  name: string,
+  screenData: TListElement[],
+  screenLoader?: boolean,
+}
+
+export interface IScreenItem {
+  id: string,
+  name: string,
+}
+
+
+export interface IProjectListItem {
+  id: string,
+  name: string,
+}
+
+export interface IProject {
+  id: string,
+  name: string,
+  listScreen: IProjectListItem[],
+  projectLoader?: boolean,
 }
 
 export type IRootState = Readonly<{
-    projects: IProject[],
+  listProject: IListProject[],
+  currentProject: IProject,
+  currentScreen: IProjectScreen,
+  listProjectLoader: boolean,
 }>;
 
 type UnsafeReturnType<T> = T extends (...args: any[]) => infer R ? R : any;
@@ -31,30 +55,50 @@ interface ActionHandler<T> {
     (state: IRootState, payload: UnsafeReturnType<T>): IRootState;
 }
 
-const addProject: ActionHandler<typeof ACTIONS.setProjects> = (state, { projects }) => ({
+const setListProject: ActionHandler<typeof ACTIONS.setListProjects> = (state, { listProject }) => ({
   ...state,
-  projects,
+  listProject,
+});
+
+const setProject: ActionHandler<typeof ACTIONS.setProject> = (state, { project }) => ({
+  ...state,
+  currentProject: project,
+});
+
+const setLoaderListProject: ActionHandler<boolean> = (state, { active }) => ({
+  ...state,
+  listProjectLoader: active,
+});
+
+const setScreen: ActionHandler<typeof ACTIONS.setScreen> = (state, { screen }) => ({
+  ...state,
+  currentScreen: screen,
+});
+
+const setProjectLoader: ActionHandler<typeof ACTIONS.setProjectLoader> = (state, { active }) => ({
+  ...state,
+  currentProject: { ...state.currentProject, projectLoader: active },
+});
+
+const setScreenLoader: ActionHandler<typeof ACTIONS.setProjectLoader> = (state, { active }) => ({
+  ...state,
+  currentScreen: { ...state.currentScreen, screenLoader: active },
 });
 
 const HANDLERS = {
-  [TYPES.SET_PROJECTS]: addProject,
+  [TYPES.SET_LIST_PROJECT]: setListProject,
+  [TYPES.SET_LIST_PROJECT_LOADER]: setLoaderListProject,
+  [TYPES.SET_PROJECT]: setProject,
+  [TYPES.SET_SCREEN]: setScreen,
+  [TYPES.SET_PROJECT_LOADER]: setProjectLoader,
+  [TYPES.SET_SCREEN_LOADER]: setScreenLoader,
 };
 
 const INITIAL_STATE: IRootState = {
-  projects: [{
-    id: '299000ff43933',
-    status: 'pending',
-    name: 'test',
-    countScreens: 0,
-    screens: [{
-      id: 's-1554270037862',
-      name: 'asd',
-      previewUrl: '',
-      imageUrl: '',
-      screenData: null,
-    }],
-    select: false,
-  }],
+  listProject: null,
+  currentProject: null,
+  currentScreen: null,
+  listProjectLoader: false,
 };
 
 export default createReducer(INITIAL_STATE, HANDLERS);

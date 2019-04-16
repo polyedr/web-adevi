@@ -70,9 +70,23 @@
     color: $lightBlue;
     text-decoration: none;
 
+    svg {
+      margin-right: 16px;
+      min-width: 24px;
+
+      & * {
+        fill: $lightBlue,
+      }
+    }
+
+
     &:hover {
       background-color: $almostBlue;
       color: #DFE4ED;
+
+      & svg * {
+        fill: #DFE4ED;
+      }
     }
 
     & i {

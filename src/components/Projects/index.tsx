@@ -1,17 +1,20 @@
 import * as React from 'react';
-import classNames from 'classnames';
 import { Link } from 'react-router-dom';
+import classNames from 'classnames';
 
 import Button from '$components/UI/Button';
 import Modal from '$components/UI/Modal';
-import { IProject } from '$redux/project/reducer';
+import { IListProject } from '$redux/project/reducer';
+import * as actions from '$redux/project/actions';
 
 const styles = require('./styles.scss');
 
 interface IDashboardProps {
-  projects: IProject[],
-  createProject(name: string): void,
-  delProject(id: string): void,
+  listProject: IListProject[],
+  getListProject: actions.IGetListProject,
+  createProject: actions.ICreateProject,
+  delProject: actions.IDelProject,
+  getProject: actions.IGetProject,
 }
 
 interface IDashboardState {
@@ -22,14 +25,21 @@ interface IDashboardState {
   newProjectDanger: boolean,
 }
 
-class Dashboard extends React.Component<IDashboardProps, IDashboardState> {
+class Projects extends React.Component<IDashboardProps, IDashboardState> {
   state = {
     search: '',
     projectName: '',
-    selectAll: false,
     modalOpen: false,
     newProjectDanger: false,
+    selectAll: false,
   };
+
+  componentDidMount() {
+    const { listProject, getListProject } = this.props;
+    if (getListProject && !listProject) {
+      getListProject();
+    }
+  }
 
   handleClick = (e) => {
     e.preventDefault();
@@ -79,7 +89,7 @@ class Dashboard extends React.Component<IDashboardProps, IDashboardState> {
     console.log('payment all');
   };
 
-  paymentProject(id) {
+  paymentProject(id: string) {
     console.log('payment', id);
   }
 
@@ -95,9 +105,9 @@ class Dashboard extends React.Component<IDashboardProps, IDashboardState> {
 
   render() {
     const {
-      props: { projects },
+      props: { listProject, getProject },
       state: {
-        search, modalOpen, projectName, newProjectDanger, selectAll,
+        search, modalOpen, projectName, newProjectDanger,
       },
     } = this;
 
@@ -107,7 +117,7 @@ class Dashboard extends React.Component<IDashboardProps, IDashboardState> {
           <div className={styles.tools}>
             <h4>All Projects</h4>
             <div>
-              <Button onClick={e => this.handleClick(e)}>
+              <Button onClick={this.handleClick}>
                 <i className="material-icons">shopping_cart</i>
                 Your Cart
               </Button>
@@ -140,57 +150,51 @@ class Dashboard extends React.Component<IDashboardProps, IDashboardState> {
                   <th>Project Status</th>
                   <th>Project Name</th>
                   <th>Total Pages</th>
-                  <th>All Pages</th>
                   <th>Actions</th>
                 </tr>
               </thead>
               <tbody>
-                {projects.map(item => (
-                  <tr key={item.id}>
-                    <td>
-                      <input
-                        type="checkbox"
-                        checked={item.select}
-                        onChange={() => {}}
-                      />
-                    </td>
-                    <td className="text-green">
-                      {item.status}
-                    </td>
-                    <td>
-                      <Link to={`/design/${item.id}`}>
-                        {item.name}
-                      </Link>
-                    </td>
-                    <td>
-                      {item.countScreens}
-                    </td>
-                    <td>
-                      { item.screens.map(screen => (
-                        <a href={screen.previewUrl} key={screen.id}>
-                          <img className="img-circle" src={screen.imageUrl} alt=" " />
-                        </a>
-                      ))}
-                    </td>
-                    <td className={styles.textNavy}>
-                      <Button type="none" onClick={() => this.dowloadProject(item.id)}>
-                        <i className="material-icons">
-                          cloud_download
-                        </i>
-                      </Button>
-                      <Button type="none" onClick={() => this.paymentProject(item.id)}>
-                        <i className={classNames('material-icons', styles.payment)}>
-                          payment
-                        </i>
-                      </Button>
-                      <Button type="none" onClick={() => this.deleteProject(item.id)}>
-                        <i className={classNames('material-icons', styles.delete)}>
-                          delete
-                        </i>
-                      </Button>
-                    </td>
-                  </tr>
-                ))}
+                {
+                  listProject && listProject.map(item => (
+                    <tr key={item.id}>
+                      <td>
+                        <input
+                          type="checkbox"
+                          checked={false}
+                          onChange={() => {}}
+                        />
+                      </td>
+                      <td className="text-green">
+                        {item.status}
+                      </td>
+                      <td>
+                        <Link to={`/project/${item.id}`}>
+                          {item.name}
+                        </Link>
+                      </td>
+                      <td>
+                        {item.countScreens}
+                      </td>
+                      <td className={styles.textNavy}>
+                        <Button type="none" onClick={() => this.dowloadProject(item.id)}>
+                          <i className="material-icons">
+                            cloud_download
+                          </i>
+                        </Button>
+                        <Button type="none" onClick={() => this.paymentProject(item.id)}>
+                          <i className={classNames('material-icons', styles.payment)}>
+                            payment
+                          </i>
+                        </Button>
+                        <Button type="none" onClick={() => this.deleteProject(item.id)}>
+                          <i className={classNames('material-icons', styles.delete)}>
+                            delete
+                          </i>
+                        </Button>
+                      </td>
+                    </tr>
+                  ))
+                }
               </tbody>
             </table>
           </div>
@@ -232,4 +236,4 @@ class Dashboard extends React.Component<IDashboardProps, IDashboardState> {
   }
 }
 
-export default Dashboard;
+export default Projects;

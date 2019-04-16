@@ -27,8 +27,16 @@ const renderElem = ({ id, key, children }) => (
   </div>
 );
 
+const renderButton = ({ id, key, children }) => (
+  <div className="button" key={key} data-id={id}>
+    {id}
+    {children || null}
+  </div>
+);
+
 export const RENDERERS = {
   block: renderBlock,
   group: renderGroup,
   elem: renderElem,
+  button: renderButton,
 };

@@ -14,13 +14,13 @@ import projectReducer from '$redux/project/reducer';
 
 const userPersistConfig: PersistConfig = {
   key: 'user',
-  whitelist: ['user', 'logo'],
+  whitelist: ['user', 'minLPanel'],
   storage,
 };
 
 const projectPersistConfig: PersistConfig = {
   key: 'project',
-  whitelist: ['user', 'logo'],
+  whitelist: ['listProject', 'currentProject', 'currentScreen'],
   storage,
 };
 

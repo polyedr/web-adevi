@@ -18,6 +18,64 @@
         }
       }
     }
+
+    .navBarRight {
+      button {
+        &:nth-child(1) svg * {
+          fill: $red;
+        }
+        &:nth-child(2) svg * {
+          fill: $almostBlack;
+        }
+      }
+    }
+  }
+
+  .contain {
+    display: flex;
+    flex-direction: row;
+
+    .wrapper {
+      flex: 1;
+    }
+
+    .leftPanel {
+      flex: 0 0 240px;
+      background-color: $white;
+
+      .grid {
+        padding: 8px;
+        border-bottom: 1px solid $matteTurq;
+      }
+
+      .addElements {
+        svg * {
+          fill: $dodgerBlue;
+        }
+
+        &:hover {
+          svg * {
+            fill: $frenchBlue;
+          }
+        }
+      }
+    }
+  }
+
+  .modal__body {
+    display: flex;
+
+    .section {
+      padding: 8px 4px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    h5 {
+      margin-bottom: 16px;
+      font-size: 16px;
+      font-weight: 600;
+    }
   }
 
   .boardWrapper {

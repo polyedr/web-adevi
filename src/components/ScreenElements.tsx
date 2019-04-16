@@ -1,8 +1,8 @@
 import * as React from 'react';
-import * as R from 'ramda';
 
-import { TList, TListElement, getList, TListItem } from '$utils/parseListItems';
-import Recursive from '$components/Recursive';
+import { TList, getList } from '$utils/parseListItems';
+import { TListElement } from '$redux/project/reducer';
+import { Recursive } from '$components/Recursive';
 
 
 interface IProps {
@@ -12,6 +12,11 @@ interface IProps {
   depth: number,
   items: TListElement[],
   styles: any,
+  onActiveSection: (parent: string) => void,
+  onUpdate: (parent: string, oldIndex: number, newIndex: number) => void,
+  onAdd: (fromParent: string, toParent: string, oldIndex: number, newIndex: number) => void,
+  onRemove: (fromParent: string, index: number) => void,
+  onChoose: (parent: string) => void,
 }
 
 interface IState {
@@ -22,56 +27,25 @@ class ScreenElements extends React.Component<IProps, IState> {
   constructor(props) {
     super(props);
     this.state = {
-      listItems: getList(props.items),
+      listItems: getList(props.items || []),
     };
   }
 
-  onUpdate = (parent: string, oldIndex: number, newIndex: number) => {
-    const { listItems } = this.state;
-    const el: string = listItems[parent].children[oldIndex];
-    const newList: string[] = R.insert(newIndex, el, R.without([el], listItems[parent].children));
-
-    this.setState(state => ({
-      ...state,
-      listItems: {
-        ...state.listItems,
-        [parent]: {
-          ...state.listItems[parent],
-          children: newList,
-        },
-      },
-    }));
-  };
-
-  onAdd = (from, to, oldIndex, newIndex) => {
-    const { listItems } = this.state;
-    const el: string = listItems[from].children[oldIndex];
-    const newList: string[] = R.insert(newIndex, el, listItems[to].children);
-    const newItems: TListItem = { ...listItems[to], parent: to, children: newList };
-    const newListItems: TList = R.assoc(to, newItems, listItems);
-
-    this.setState(() => ({ listItems: newListItems }));
-  };
-
-  onRemove = (parent, index) => {
-    const { listItems } = this.state;
-    const newList: string[] = R.remove(index, 1, listItems[parent].children);
-
-    this.setState(state => ({
-      ...state,
-      listItems: {
-        ...state.listItems,
-        [parent]: {
-          ...state.listItems[parent],
-          children: newList,
-        },
-      },
-    }));
-  };
+  componentWillReceiveProps({ items }) {
+    if (items) {
+      this.setState(() => ({ listItems: getList(items || []) }));
+    }
+  }
 
   render() {
     const {
-      props: { styles },
+      props: {
+        styles,
+        onUpdate,
+        onAdd,
+        onRemove,
+        onChoose,
+      },
       state: { listItems },
     } = this;
 
@@ -80,9 +54,10 @@ class ScreenElements extends React.Component<IProps, IState> {
         listItems={listItems}
         item={listItems.root}
         styles={styles}
-        onUpdate={this.onUpdate}
-        onAdd={this.onAdd}
-        onRemove={this.onRemove}
+        onUpdate={onUpdate}
+        onAdd={onAdd}
+        onRemove={onRemove}
+        onChoose={onChoose}
       />
     );
   }

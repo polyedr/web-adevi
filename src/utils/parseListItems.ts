@@ -1,7 +1,9 @@
+import { TListElement } from '$redux/project/reducer';
+
 export type TListItem = {
-  parent: string,
-  type: string,
   id: string,
+  type: string,
+  parent: string,
   children: string[],
 }
 
@@ -9,17 +11,11 @@ export type TList = {
   [x: string]: TListItem
 }
 
-export type TListElement = {
-  id: number,
-  type: string,
-  children: TListElement[],
-}
-
 type FnParseList = (items?: TListElement[], parent?: string, list?: TList) => TList;
 
 
 const itemId = ({ id, type }) => (`${type}${id}`);
-const itemChildrens = ({ children }) => ((children && children.map(itemId)) || []);
+const listChildren = ({ children }) => ((children && children.map(itemId)) || []);
 const itemRoot = items => ({
   parent: '-1',
   type: 'root',
@@ -28,26 +24,45 @@ const itemRoot = items => ({
 });
 
 
-export const parseList: FnParseList = (items = [], parent = 'root') => {
-  const result: TList = items.reduce((obj, item) => ({
+export const parseList: FnParseList = (items = [], parent = 'root') => (
+  items.reduce((obj, item) => ({
     ...obj,
     [itemId(item)]: {
       id: itemId(item),
       parent,
       type: item.type,
-      children: itemChildrens(item),
+      children: listChildren(item),
     },
     ...(
       (
         item.children && item.children.length > 0
         && parseList(item.children, itemId(item))
       ) || {}),
-  }), {});
-
-  return result;
-};
+  }), {})
+);
 
 export const getList: FnParseList = (items = []) => ({
   root: itemRoot(items),
   ...parseList(items, 'root'),
 });
+
+
+type FnParseListRevers = (items: TList, parent?: string) => TListElement[];
+
+export const getListRevers: FnParseListRevers = (listItems, parent = 'root') => (
+  listItems[parent].children.map((item) => {
+    if (listItems[item].children) {
+      return ({
+        id: Number(listItems[item].id.replace(listItems[item].type, '')),
+        type: listItems[item].type,
+        children: getListRevers(listItems, item),
+      });
+    }
+
+    return ({
+      id: Number(listItems[item].id.replace(listItems[item].type, '')),
+      type: listItems[item].type,
+      children: [],
+    });
+  })
+);
