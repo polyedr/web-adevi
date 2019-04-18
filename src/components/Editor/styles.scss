@@ -116,31 +116,4 @@
 
     }
   }
-
-  :global(.block), :global(.group), :global(.elem) {
-    user-select: none;
-    cursor: move;
-    padding: 5px;
-  }
-  :global(.block) {
-    margin-bottom: 8px;
-    background-color: #efe5fd;
-  }
-  :global(.group) {
-    margin: 0 8px 8px;
-    background-color: #D7CCC8;
-  }
-
-  :global(.elem) {
-    margin: 4px;
-    background-color: #FBE9E7;
-  }
-
-  :global(.vertical, .horizontal) {
-    display: flex;
-  }
-
-  :global(.vertical) {
-    flex-direction: column;
-  }
 }

@@ -9,10 +9,10 @@ import { IListProject } from '$redux/project/reducer';
 
 interface IDashboardProps {
   listProject: IListProject[],
-  getListProject: actions.IGetListProject,
-  createProject: actions.ICreateProject,
-  delProject: actions.IDelProject,
-  getProject: actions.IGetProject,
+  getListProject: actions.TGetListProject,
+  createProject: actions.TCreateProject,
+  delProject: actions.TDelProject,
+  getProject: actions.TGetProject,
 }
 
 const ProjectsLogic: React.FunctionComponent<IDashboardProps> = ({

@@ -4,20 +4,24 @@ import {
   IProject,
   IProjectScreen,
 } from '$redux/project/reducer';
+import { IListSortable, ISortableItem } from '$utils/parseListItems';
 
 
-export type IGetListProject = () => void;
-export type IGetProject = (id: string) => void;
-export type ICreateProject = (name: string) => void;
-export type IDelProject = (id: string) => void;
-export type IGetScreen = (projectId: string, screenId: string) => void;
-export type IAddScreen = (projectId: string, name: string) => void;
-export type IDelScreen = (projectId: string, screenId: string) => void;
-export type ISetScreenData = (screenData: IProjectScreen) => void;
-export type ISetLoader = (active: boolean) => ({ type: string, active: boolean });
+export type TGetListProject = () => void;
+export type TGetProject = (id: string) => void;
+export type TCreateProject = (name: string) => void;
+export type TDelProject = (id: string) => void;
+export type TGetScreen = (projectId: string, screenId: string) => void;
+export type TAddScreen = (projectId: string, name: string) => void;
+export type TDelScreen = (projectId: string, screenId: string) => void;
+export type TSetListSortable = (listSortable: IListSortable) => void;
+export type TSetScreen = (screen: IProjectScreen) => ({ type: string, screen: IProjectScreen });
+export type TSetLoader = (active: boolean) => ({ type: string, active: boolean });
+export type TAddElement = (parentId: string, item: ISortableItem) => void;
+// export type ISetScreenData = (screenData: ) => void;
 
 
-export const getListProject: IGetListProject = () => ({
+export const getListProject: TGetListProject = () => ({
   type: TYPES.GET_LIST_PROJECT,
 });
 
@@ -27,17 +31,17 @@ export const setListProjects = (listProject: IListProject[]) => ({
 });
 
 
-export const createProject: ICreateProject = name => ({
+export const createProject: TCreateProject = name => ({
   type: TYPES.CREATE_PROJECT,
   name,
 });
 
-export const delProject: IDelProject = id => ({
+export const delProject: TDelProject = id => ({
   type: TYPES.DEL_PROJECT,
   id,
 });
 
-export const getProject: IGetProject = id => ({
+export const getProject: TGetProject = id => ({
   type: TYPES.GET_PROJECT,
   id,
 });
@@ -47,42 +51,52 @@ export const setProject = (project: IProject) => ({
   project,
 });
 
-export const setListProjectLoader: ISetLoader = active => ({
+export const setListProjectLoader: TSetLoader = active => ({
   type: TYPES.SET_LIST_PROJECT_LOADER,
   active,
 });
 
-export const setProjectLoader: ISetLoader = active => ({
+export const setProjectLoader: TSetLoader = active => ({
   type: TYPES.SET_PROJECT_LOADER,
   active,
 });
 
-export const setScreenLoader: ISetLoader = active => ({
+export const setScreenLoader: TSetLoader = active => ({
   type: TYPES.SET_SCREEN_LOADER,
   active,
 });
 
-export const dellScreen: IDelScreen = (projectId, screenId) => ({
+export const dellScreen: TDelScreen = (projectId, screenId) => ({
   type: TYPES.DEL_SCREEN,
   payload: { projectId, screenId },
 });
 
-export const addScreen: IAddScreen = (projectId, name) => ({
+export const addScreen: TAddScreen = (projectId, name) => ({
   type: TYPES.ADD_SCREEN,
   payload: { projectId, name },
 });
 
-export const getScreen: IGetScreen = (projectId, screenId) => ({
+export const getScreen: TGetScreen = (projectId, screenId) => ({
   type: TYPES.GET_SCREEN,
   payload: { projectId, screenId },
 });
 
-export const setScreenData: ISetScreenData = screenData => ({
-  type: TYPES.SET_SCREEN_DATA,
-  payload: { screenData },
+export const setListSortable: TSetListSortable = itemSortable => ({
+  type: TYPES.SET_LIST_SORTABLE,
+  itemSortable,
 });
 
-export const setScreen = (screen: IProjectScreen) => ({
+export const setScreen: TSetScreen = screen => ({
   type: TYPES.SET_SCREEN,
   screen,
 });
+
+export const addElement: TAddElement = (parentId, item) => ({
+  type: TYPES.ADD_ELEMENT,
+  payload: { parentId, item },
+});
+
+// export const setScreenData: ISetScreenData = screenData => ({
+//   type: TYPES.SET_SCREEN_DATA,
+//   screenData,
+// });

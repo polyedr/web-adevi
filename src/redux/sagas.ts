@@ -7,7 +7,12 @@ import * as R from 'ramda';
 // import { delay } from 'redux-saga';
 
 import TYPES from '$redux/constants';
-import { IListProject, IProject, IProjectListItem, IProjectScreen } from "$redux/project/reducer";
+import {
+  IListProject,
+  IListScreen,
+  IProject,
+  IProjectScreen,
+} from '$redux/project/reducer';
 import {
   setListProjects,
   setListProjectLoader,
@@ -16,6 +21,7 @@ import {
   setProjectLoader,
   setScreenLoader,
 } from '$redux/project/actions';
+import { getList, getListRevers, IListSortable } from '$utils/parseListItems';
 
 
 const mockListProject = [{
@@ -33,9 +39,10 @@ const mockProject = {
   ],
 };
 const mockScreenData = '[{"type":"block","id":3,"children":[{"orientation":"vertical","type":"group","id":6,"children":[{"props":{"width":120,"buoyancy":100,"html_type":"text_title","height":50},"type":"elem","id":7,"children":[]},{"props":{"width":150,"buoyancy":98,"html_type":"text_description","height":40},"type":"elem","id":8,"children":[]}]},{"orientation":"vertical","type":"group","id":7,"children":[{"props":{"width":150,"buoyancy":64,"html_type":"input_firstname","height":80},"type":"elem","id":9,"children":[]},{"props":{"width":150,"buoyancy":61,"html_type":"input_lastname","height":80},"type":"elem","id":10,"children":[]}]},{"orientation":"horizontal","type":"group","id":8,"children":[{"props":{"width":40,"buoyancy":54,"html_type":"select_day","height":20},"type":"elem","id":11,"children":[]},{"props":{"width":40,"buoyancy":54,"html_type":"select_month","height":20},"type":"elem","id":12,"children":[]},{"props":{"width":40,"buoyancy":54,"html_type":"select_year","height":20},"type":"elem","id":13,"children":[]}]},{"orientation":"vertical","type":"group","id":2,"children":[{"props":{"width":150,"buoyancy":10,"html_type":"input_password","height":80},"type":"elem","id":2,"children":[]},{"props":{"width":150,"buoyancy":10,"html_type":"input_password","height":80},"type":"elem","id":3,"children":[]}]},{"orientation":"vertical","type":"group","id":4,"children":[{"props":{"width":150,"buoyancy":1,"html_type":"button_end_composite_scenario","height":80},"type":"elem","id":5,"children":[]}]}]},{"type":"block","id":1,"children":[{"orientation":"vertical","type":"group","id":1,"children":[{"props":{"width":150,"buoyancy":86,"html_type":"input_phone","height":80},"type":"elem","id":0,"children":[]},{"props":{"width":150,"buoyancy":10,"html_type":"input_password","height":80},"type":"elem","id":1,"children":[]}]},{"orientation":"vertical","type":"group","id":3,"children":[{"props":{"width":150,"buoyancy":1,"html_type":"button_end_composite_scenario","height":80},"type":"elem","id":4,"children":[]}]}]},{"type":"block","id":2,"children":[{"orientation":"vertical","type":"group","id":5,"children":[{"props":{"width":100,"buoyancy":2,"html_type":"hyperlink_end simple_scenario","height":80},"type":"elem","id":6,"children":[]}]}]},{"type":"block","id":4,"children":[{"orientation":"vertical","type":"group","id":9,"children":[{"props":{"width":150,"buoyancy":0,"html_type":"button_end simple_scenario","height":80},"type":"elem","id":14,"children":[]}]}]}]';
+// const mockScreenData = '[{"type":"block","id":3,"children":[{"orientation":"vertical","type":"group","id":6,"children":[{"props":{"width":120,"buoyancy":100,"html_type":"text_title","height":50},"type":"elem","id":7,"children":[]},{"props":{"width":150,"buoyancy":98,"html_type":"text_description","height":40},"type":"elem","id":8,"children":[]}]},{"orientation":"horizontal","type":"group","id":4,"children":[{"props":{"width":150,"buoyancy":1,"html_type":"button_end_composite_scenario","height":80},"type":"elem","id":5,"children":[]}]}]}]';
 
 
-export const idGenerator = () => (new Date().getTime());
+export const uniqueId = () => `id${new Date().getTime()}`;
 
 // function* loadInitStart() {}
 // function* authCheckSaga() {}
@@ -58,7 +65,7 @@ function* getListProject() {
 function* addProject({ name }) {
   // TODO: axios yield call(Requester.put, `/project/${name}`)
   const result: IListProject = {
-    id: `p-${idGenerator()}`,
+    id: `p-${uniqueId()}`,
     status: 'pending',
     name,
     countScreens: 0,
@@ -89,10 +96,13 @@ function* getScreen({ payload }) {
   // TODO: axios yield call(Requester.get, `/project/${id)/screen/${screenId}`)
 
   const { project: { currentProject: { listScreen } } } = yield select(state => state);
+  const screenData = screenId === 's-1554270037862' ? JSON.parse(mockScreenData) : [];
+
   const result: IProjectScreen = {
     id: screenId,
     name: R.prop('name', listScreen.find(p => p.id === screenId)) || 'newScreen',
-    screenData: screenId === 's-1554270037862' ? JSON.parse(mockScreenData) : [],
+    screenData,
+    listSortable: getList(screenData),
   };
 
   yield put(setScreenLoader(false));
@@ -132,7 +142,7 @@ function* addScreen({ payload }) {
   const { projectId, name } = payload;
   // TODO: axios yield call(Requester.put,`/project/${projectId}/screen/${name}`)
   const result: IProjectScreen = {
-    id: `s-${idGenerator()}`,
+    id: `s-${uniqueId()}`,
     name,
     screenData: [],
   };
@@ -167,40 +177,45 @@ function* delScreen({ payload }) {
   yield call(getScreen, { payload: { projectId, screenId: lastScreenId } });
 }
 
-/*
-function* updateScreenOfProject({ payload }) {
-  const { projectId, screenData } = payload;
-  const { project: { listProject } } = yield select(state => state);
+function* setlistSortable({ itemSortable }) {
+  const { project: { currentScreen } } = yield select(state => state);
+  const newListSortable: IListSortable = { ...currentScreen.listSortable, ...itemSortable };
+  const newScreenData: IListScreen[] = getListRevers(newListSortable);
 
-  const hasIdOfProject = R.propEq('id', projectId);
+  const newScreen = {
+    ...currentScreen,
+    screenData: newScreenData,
+    listSortable: newListSortable,
+  };
 
-  const indexProject = R.findIndex(hasIdOfProject, listProject);
-
-  if (indexProject === -1) return;
-
-  const project: IProject = R.find(hasIdOfProject, listProject);
-  let updatedScreens: IProjectScreen[] = [];
-  const indexScreen = R.findIndex(R.propEq('id', screenData.id))(R.propOr({}, 'screens', project));
-
-  if (indexScreen !== -1) {
-    updatedScreens = R.adjust(
-      indexScreen,
-      screen => ({ ...screen, ...screenData }),
-      R.propOr({}, 'screens', project),
-    );
-  } else {
-    updatedScreens = R.append(screenData, project.listScreen);
-  }
-
-  const updatedProjects: IProject[] = R.adjust(
-    indexProject,
-    R.assoc('screens', updatedScreens),
-    listProject,
-  );
-
-  yield put(setProjects(updatedProjects));
+  // TODO: axios yield call(Requester.set, `/project/${id)/screen/${screenId}`)
+  yield put(setScreen(newScreen));
 }
-*/
+
+function* addElement({ payload }) {
+  const { parentId, item } = payload;
+  const { project: { currentScreen } } = yield select(state => state);
+  const itemSortable: IListSortable = R.assoc(item.id, item, currentScreen.listSortable);
+  const listSortable: IListSortable = {
+    ...currentScreen.listSortable,
+    ...itemSortable,
+    [parentId]: {
+      ...currentScreen.listSortable[parentId],
+      children: [
+        ...currentScreen.listSortable[parentId].children,
+        item.id,
+      ],
+    },
+  };
+
+  const newScreen: IProjectScreen = {
+    ...currentScreen,
+    listSortable,
+    screenData: getListRevers(listSortable),
+  };
+
+  yield put(setScreen(newScreen));
+}
 
 function* mySaga() {
   // yield fork(loadInitStart);
@@ -216,7 +231,8 @@ function* mySaga() {
   yield takeLatest(TYPES.GET_SCREEN, getScreen);
   yield takeLatest(TYPES.DEL_SCREEN, delScreen);
   yield takeLatest(TYPES.ADD_SCREEN, addScreen);
-  // yield takeLatest(TYPES.SET_SCREEN_DATA, updateScreenOfProject);
+  yield takeLatest(TYPES.SET_LIST_SORTABLE, setlistSortable);
+  yield takeLatest(TYPES.ADD_ELEMENT, addElement);
 }
 
 export default mySaga;

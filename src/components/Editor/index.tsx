@@ -1,72 +1,69 @@
 import * as React from 'react';
 import { Prompt } from 'react-router';
-import * as R from 'ramda';
 
-import { IProjectScreen, TListElement } from '$redux/project/reducer';
-import ScreenElements from '$components/ScreenElements';
-import { IDelScreen, ISetScreenData } from '$redux/project/actions';
+import { uniqueId } from '$redux/sagas';
+import { optionsUIMenu } from '$constants/menu';
+import { Recursive } from '$containers/Recursive';
 import { Icon } from '$components/UI/Icon';
 import Button from '$components/UI/Button';
 import Modal from '$components/UI/Modal';
 import Checkbox from '$components/UI/Checkbox';
-import { idGenerator } from '$redux/sagas';
+import { IProjectScreen } from '$redux/project/reducer';
+import { IOnChange } from '$components/Editor/SortableGroup';
+import { IListSortable, ISortableItem } from '$utils/parseListItems';
 import {
-  TList,
-  TListItem,
-  getListRevers,
-  getList,
-} from '$utils/parseListItems';
+  TDelScreen,
+  TAddElement,
+  TSetScreen,
+  TSetListSortable,
+} from '$redux/project/actions';
+
 
 const styles = require('./styles.scss');
-
-type TOptions = {
-  label: string,
-  value: string,
-}
 
 interface IEditorProps {
   projectId: string,
   screen: IProjectScreen,
-  dellScreen: IDelScreen,
-  setScreenData: ISetScreenData,
+  dellScreen: TDelScreen,
+  setScreen: TSetScreen,
+  addElement: TAddElement,
+  setListSortable: TSetListSortable,
 }
 
 interface IEditorState {
   scenario: string,
-  modalOpen: boolean,
+  modalAddOpen: boolean,
+  modalDellOpen: boolean,
   activeSection: string,
-  listItems: TList,
 }
-
-const options: TOptions[] = [
-  { label: 'Text', value: 'text' },
-  { label: 'Input', value: 'input' },
-  { label: 'Button', value: 'button' },
-  { label: 'HyperLine', value: 'hyperLine' },
-  { label: 'RadioButton', value: 'radioButton' },
-  { label: 'Checkbox', value: 'checkbox' },
-  { label: 'Sign in', value: 'signIn' },
-  { label: 'Sign up', value: 'signUp' },
-  { label: '+Custom', value: 'custom' },
-];
 
 class Editor extends React.Component<IEditorProps, IEditorState> {
   constructor(props) {
     super(props);
     this.state = {
       scenario: '',
-      modalOpen: false,
-      listItems: getList(props.screen.screenData || []),
+      modalAddOpen: false,
+      modalDellOpen: false,
+      // listItems: props.screen && getList(props.screen.screenData),
       activeSection: 'root',
     };
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.screen) {
+      // this.setState(() => ({ listItems: getList(nextProps.screen.screenData) }));
+    }
+  }
+
   addElements = () => {
-    this.setState({ modalOpen: true });
+    this.setState({ modalAddOpen: true });
   };
 
   cancelModal = () => {
-    this.setState({ modalOpen: false });
+    this.setState({
+      modalAddOpen: false,
+      modalDellOpen: false,
+    });
   };
 
   changeScenario = type => (event) => {
@@ -74,7 +71,6 @@ class Editor extends React.Component<IEditorProps, IEditorState> {
   };
 
   onSelectScenario = ({ target }) => {
-    console.log(target.value);
     this.setState({ scenario: target.value });
   };
 
@@ -82,105 +78,69 @@ class Editor extends React.Component<IEditorProps, IEditorState> {
     this.setState({ activeSection });
   };
 
-  onConfirmModal = () => {
+  openModalDell = () => {
+    this.setState({
+      modalDellOpen: true,
+    });
+  };
+
+  onConfirmModalAdd = () => {
     const {
-      props: { screen },
+      props: { addElement },
       state: { scenario, activeSection },
     } = this;
 
-    const id = `${scenario}${idGenerator()}`;
+    const id = `${scenario}${uniqueId()}`;
 
-    const newElement: TListItem = {
+    const newElement: ISortableItem = {
       id,
       type: scenario,
-      parent: activeSection,
       children: [],
     };
 
-    const listItems:TList = R.assoc(id, newElement, getList(screen.screenData));
-    const listChildren:string[] = R.append(id, R.path([activeSection, 'children'], listItems));
-    const result = R.assocPath([activeSection, 'children'], listChildren, listItems);
+    addElement(activeSection, newElement);
 
-    // this.saveScreenData(result);
-    console.log(result);
-
-    this.setState({ modalOpen: false });
+    this.setState({
+      modalAddOpen: false,
+    });
   };
 
-  saveScreenData = () => {
-    const {
-      props: { screen, setScreenData },
-      state: { listItems },
-    } = this;
 
-    const screenData: TListElement[] = getListRevers(listItems);
-
-    console.log(screenData);
-
-    setScreenData({ ...screen, screenData });
-  };
-
-  removeScreen = () => {
+  onConfirmModalDell = () => {
     const { dellScreen, projectId, screen } = this.props;
 
     dellScreen(projectId, screen.id);
   };
 
-  onUpdate = (parent: string, oldIndex: number, newIndex: number) => {
-    const { listItems } = this.state;
-    const el: string = listItems[parent].children[oldIndex];
-    const newList: string[] = R.insert(newIndex, el, R.without([el], listItems[parent].children));
-
-    this.setState(state => ({
-      ...state,
-      listItems: {
-        ...state.listItems,
-        [parent]: {
-          ...state.listItems[parent],
-          children: newList,
-        },
+  updateSortableList: IOnChange = (parent, items) => {
+    const { screen: { listSortable }, setListSortable } = this.props;
+    const newLS: IListSortable = {
+      ...listSortable,
+      [parent]: {
+        ...listSortable[parent],
+        children: items,
       },
-    }));
+    };
+
+    setListSortable(newLS);
   };
 
-  onAdd = (from, to, oldIndex, newIndex) => {
-    const { listItems } = this.state;
-    const el: string = listItems[from].children[oldIndex];
-    const newList: string[] = R.insert(newIndex, el, listItems[to].children);
-    const newItems: TListItem = { ...listItems[to], parent: to, children: newList };
-    const newListItems: TList = R.assoc(to, newItems, listItems);
+  saveScreen = () => {
 
-    this.setState(() => ({ listItems: newListItems }));
   };
-
-  onRemove = (parent, index) => {
-    const { listItems } = this.state;
-    const newList: string[] = R.remove(index, 1, listItems[parent].children);
-
-    this.setState(state => ({
-      ...state,
-      listItems: {
-        ...state.listItems,
-        [parent]: {
-          ...state.listItems[parent],
-          children: newList,
-        },
-      },
-    }));
-  };
-
 
   render() {
     const {
       props: { screen },
       state: {
         scenario,
-        modalOpen,
+        modalAddOpen,
+        modalDellOpen,
       },
     } = this;
 
     return (
-      <div className={styles.main} key={screen.id}>
+      <div className={styles.main}>
         <div className={styles.navBar}>
           <div>
             left navPanel
@@ -199,14 +159,14 @@ class Editor extends React.Component<IEditorProps, IEditorState> {
           <div className={styles.navBarRight}>
             <Button
               type="none"
-              onClick={this.removeScreen}
+              onClick={this.openModalDell}
               disabled={!screen}
             >
               <Icon icon="delete" size={28} />
             </Button>
             <Button
               type="none"
-              onClick={this.saveScreenData}
+              onClick={this.saveScreen}
               disabled={!screen}
             >
               <Icon icon="save" size={28} />
@@ -215,21 +175,16 @@ class Editor extends React.Component<IEditorProps, IEditorState> {
         </div>
         <div className={styles.contain}>
           <div className={styles.wrapper}>
-            {screen && (
-              <ScreenElements
-                id="aa"
-                items={screen.screenData}
-                path={[]}
-                depth={0}
-                type="root"
-                styles={styles}
-                onActiveSection={this.onActiveSection}
-                onUpdate={this.onUpdate}
-                onAdd={this.onAdd}
-                onRemove={this.onRemove}
-                onChoose={this.onActiveSection}
-              />
-            )}
+            {
+              screen && (
+                <Recursive
+                  item={screen.listSortable.root}
+                  styles={styles}
+                  onChoose={this.onActiveSection}
+                  onChange={this.updateSortableList}
+                />
+              )
+            }
           </div>
           <div className={styles.leftPanel}>
             <div className={styles.grid}>
@@ -248,11 +203,24 @@ class Editor extends React.Component<IEditorProps, IEditorState> {
             Panel Edit Props
           </div>
         </div>
-        {modalOpen && (
+        {modalDellOpen && (
+          <Modal
+            title=""
+            confirmText="Delete"
+            onConfirm={this.onConfirmModalDell}
+            cancelText="Close"
+            onClose={this.cancelModal}
+          >
+            <div className={styles.modal__body}>
+              {`Delete Screen: ${screen.name}`}
+            </div>
+          </Modal>
+        )}
+        {modalAddOpen && (
           <Modal
             title=""
             confirmText="Add"
-            onConfirm={this.onConfirmModal}
+            onConfirm={this.onConfirmModalAdd}
             cancelText="Close"
             onClose={this.cancelModal}
           >
@@ -271,7 +239,7 @@ class Editor extends React.Component<IEditorProps, IEditorState> {
                 />
                 <select onChange={this.onSelectScenario} value={scenario}>
                   <option value="">Scenario type</option>
-                  {options.map(item => (
+                  {optionsUIMenu.map(item => (
                     <option key={item.value} value={item.value}>{item.label}</option>
                   ))}
                 </select>
@@ -313,3 +281,61 @@ class Editor extends React.Component<IEditorProps, IEditorState> {
 }
 
 export default Editor;
+
+/*
+  onUpdate = (parent: string, oldIndex: number, newIndex: number) => {
+    const { listItems } = this.state;
+    const el: string = listItems[parent].children[oldIndex];
+    const newList: string[] = R.insert(newIndex, el, R.without([el], listItems[parent].children));
+
+    this.setState(state => ({
+      ...state,
+      listItems: {
+        ...state.listItems,
+        [parent]: {
+          ...state.listItems[parent],
+          children: newList,
+        },
+      },
+    }));
+  };
+
+  onAdd = (from, to, oldIndex, newIndex) => {
+    const { listItems } = this.state;
+    const el: string = listItems[from].children[oldIndex];
+    const newList: string[] = R.insert(newIndex, el, listItems[to].children);
+    const newItems: ISortableItem = { ...listItems[to], parent: to, children: newList };
+    const newListItems: IListSortable = R.assoc(to, newItems, listItems);
+
+    this.setState(() => ({ listItems: newListItems }));
+  };
+
+  onRemove = (parent, index) => {
+    const { listItems } = this.state;
+    const newList: string[] = R.remove(index, 1, listItems[parent].children);
+
+    this.setState(state => ({
+      ...state,
+      listItems: {
+        ...state.listItems,
+        [parent]: {
+          ...state.listItems[parent],
+          children: newList,
+        },
+      },
+    }));
+  };
+
+  onChange = (parent, children) => {
+    this.setState(state => ({
+      ...state,
+      listItems: {
+        ...state.listItems,
+        [parent]: {
+          ...state.listItems[parent],
+          children,
+        },
+      },
+    }));
+  };
+*/

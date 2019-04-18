@@ -2,6 +2,7 @@ import { createReducer } from 'reduxsauce';
 
 import * as ACTIONS from '$redux/project/actions';
 import TYPES from '$redux/constants';
+import { IListSortable } from '$utils/parseListItems';
 
 
 export interface IListProject {
@@ -11,24 +12,19 @@ export interface IListProject {
   countScreens: number,
 }
 
-export type TListElement = {
+export interface IListScreen {
   id: number,
   type: string,
-  children: TListElement[],
+  children: IListScreen[],
 }
 
 export interface IProjectScreen {
   id: string,
   name: string,
-  screenData: TListElement[],
+  screenData: IListScreen[],
+  listSortable?: IListSortable
   screenLoader?: boolean,
 }
-
-export interface IScreenItem {
-  id: string,
-  name: string,
-}
-
 
 export interface IProjectListItem {
   id: string,

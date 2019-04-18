@@ -5,7 +5,7 @@ import { IProject, IProjectScreen } from '$redux/project/reducer';
 import Modal from '$components/UI/Modal';
 import { Icon } from '$components/UI/Icon';
 import Button from '$components/UI/Button';
-import { IAddScreen, IGetProject, IGetScreen } from '$redux/project/actions';
+import { TAddScreen, TGetProject, TGetScreen } from '$redux/project/actions';
 
 const styles = require('./styles.scss');
 
@@ -13,9 +13,9 @@ interface IProps {
   projectId: string,
   project: IProject,
   screen: IProjectScreen,
-  getProject: IGetProject,
-  getScreen: IGetScreen,
-  addScreen: IAddScreen,
+  getProject: TGetProject,
+  getScreen: TGetScreen,
+  addScreen: TAddScreen,
 }
 
 interface IState {

@@ -11,10 +11,10 @@ const styles = require('./styles.scss');
 
 interface IDashboardProps {
   listProject: IListProject[],
-  getListProject: actions.IGetListProject,
-  createProject: actions.ICreateProject,
-  delProject: actions.IDelProject,
-  getProject: actions.IGetProject,
+  getListProject: actions.TGetListProject,
+  createProject: actions.TCreateProject,
+  delProject: actions.TDelProject,
+  getProject: actions.TGetProject,
 }
 
 interface IDashboardState {

@@ -1,35 +1,34 @@
-import { TListElement } from '$redux/project/reducer';
+import { IListScreen } from '$redux/project/reducer';
 
-export type TListItem = {
+export interface ISortableItem {
   id: string,
   type: string,
-  parent: string,
+  // parent: string,
   children: string[],
 }
 
-export type TList = {
-  [x: string]: TListItem
+export interface IListSortable {
+  [x: string]: ISortableItem
 }
 
-type FnParseList = (items?: TListElement[], parent?: string, list?: TList) => TList;
+type FnParseList = (items?: IListScreen[], parent?: string, list?: IListSortable) => IListSortable;
 
 
 const itemId = ({ id, type }) => (`${type}${id}`);
 const listChildren = ({ children }) => ((children && children.map(itemId)) || []);
 const itemRoot = items => ({
-  parent: '-1',
   type: 'root',
   id: 'root',
   children: items.map(itemId) || [],
 });
 
 
-export const parseList: FnParseList = (items = [], parent = 'root') => (
+export const parseList: FnParseList = (items = []) => (
   items.reduce((obj, item) => ({
     ...obj,
     [itemId(item)]: {
       id: itemId(item),
-      parent,
+      // parent,
       type: item.type,
       children: listChildren(item),
     },
@@ -43,11 +42,11 @@ export const parseList: FnParseList = (items = [], parent = 'root') => (
 
 export const getList: FnParseList = (items = []) => ({
   root: itemRoot(items),
-  ...parseList(items, 'root'),
+  ...parseList(items),
 });
 
 
-type FnParseListRevers = (items: TList, parent?: string) => TListElement[];
+type FnParseListRevers = (items: IListSortable, parent?: string) => IListScreen[];
 
 export const getListRevers: FnParseListRevers = (listItems, parent = 'root') => (
   listItems[parent].children.map((item) => {

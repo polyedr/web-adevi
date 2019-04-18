@@ -9,10 +9,10 @@ import * as actions from '$redux/project/actions';
 
 
 export interface match<P> {
-  params: P;
-  isExact: boolean;
-  path: string;
-  url: string;
+  params: P,
+  isExact: boolean,
+  path: string,
+  url: string,
 }
 
 interface MatchParams {
@@ -27,7 +27,9 @@ interface IEditorProps {
   getScreen: typeof actions.getScreen,
   addScreen: typeof actions.addScreen,
   dellScreen: typeof actions.dellScreen,
-  setScreenData: typeof actions.setScreenData,
+  setScreen: typeof actions.setScreen,
+  addElement: typeof actions.addElement,
+  setListSortable: typeof actions.setListSortable,
 }
 
 const EditorLogic: React.FunctionComponent<IEditorProps> = ({
@@ -38,7 +40,9 @@ const EditorLogic: React.FunctionComponent<IEditorProps> = ({
   getScreen,
   addScreen,
   dellScreen,
-  setScreenData,
+  setScreen,
+  addElement,
+  setListSortable,
 }: IEditorProps) => (
   <React.Fragment>
     <NavPanelScreen
@@ -53,7 +57,9 @@ const EditorLogic: React.FunctionComponent<IEditorProps> = ({
       projectId={projectId}
       screen={screen}
       dellScreen={dellScreen}
-      setScreenData={setScreenData}
+      setScreen={setScreen}
+      addElement={addElement}
+      setListSortable={setListSortable}
     />
   </React.Fragment>
 );
@@ -62,12 +68,15 @@ const mapStateToProps = state => ({
   project: state.project.currentProject,
   screen: state.project.currentScreen,
 });
+
 const mapDispatchToProps = dispatch => bindActionCreators({
   getProject: actions.getProject,
   getScreen: actions.getScreen,
   addScreen: actions.addScreen,
   dellScreen: actions.dellScreen,
-  setScreenData: actions.setScreenData,
+  setScreen: actions.setScreen,
+  addElement: actions.addElement,
+  setListSortable: actions.setListSortable,
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(EditorLogic);
