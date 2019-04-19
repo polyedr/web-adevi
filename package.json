@@ -6,7 +6,8 @@
     "start": "NODE_ENV=development webpack-dev-server --mode development --hot --open --inline --progress",
     "build": "NODE_ENV=production webpack --env production --config=webpack.config.js --progress -p",
     "profile": "webpack --json > stats.json",
-    "lint": "eslint src/** --ext .ts,.tsx --fix"
+    "lint": "eslint src/** --ext .ts,.tsx --fix",
+    "heroku-postbuild": "npm run build"
   },
   "author": "",
   "repository": {
