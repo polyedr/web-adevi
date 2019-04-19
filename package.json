@@ -5,9 +5,11 @@
   "scripts": {
     "start": "NODE_ENV=development webpack-dev-server --mode development --hot --open --inline --progress",
     "build": "NODE_ENV=production webpack --env production --config=webpack.config.js --progress -p",
+    "heroku-prebuild": "npm install --dev",
+    "heroku-postbuild": "webpack -p --env --progress --colors --config ./webpack.config.js --mode production --env.NOVE_ENV=production",
     "profile": "webpack --json > stats.json",
-    "lint": "eslint src/** --ext .ts,.tsx --fix",
-    "heroku-postbuild": "npm run build"
+    "lint": "eslint src/** --ext .ts,.tsx --fix"
+
   },
   "author": "",
   "repository": {
