@@ -23,6 +23,7 @@ export default createTypes({
   ADD_SCREEN: null,
   DEL_SCREEN: null,
   ADD_ELEMENT: null,
+  DELL_ELEMENT: null,
   SET_LIST_SORTABLE: null,
   SET_SCREEN_DATA: null,
   SET_SCREEN_LOADER: null,

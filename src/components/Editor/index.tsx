@@ -3,7 +3,8 @@ import { Prompt } from 'react-router';
 
 import { uniqueId } from '$redux/sagas';
 import { optionsUIMenu } from '$constants/menu';
-import { Recursive } from '$containers/Recursive';
+import { PanelEditProps } from '$components/Editor/PanelEditProps';
+import Recursive from '$containers/Recursive';
 import { Icon } from '$components/UI/Icon';
 import Button from '$components/UI/Button';
 import Modal from '$components/UI/Modal';
@@ -14,12 +15,18 @@ import { IListSortable, ISortableItem } from '$utils/parseListItems';
 import {
   TDelScreen,
   TAddElement,
+  TDellElement,
   TSetScreen,
   TSetListSortable,
 } from '$redux/project/actions';
 
-
 const styles = require('./styles.scss');
+
+
+export interface IActiveItem {
+  parentId: string,
+  itemId: string,
+}
 
 interface IEditorProps {
   projectId: string,
@@ -27,6 +34,7 @@ interface IEditorProps {
   dellScreen: TDelScreen,
   setScreen: TSetScreen,
   addElement: TAddElement,
+  dellElement: TDellElement,
   setListSortable: TSetListSortable,
 }
 
@@ -34,8 +42,9 @@ interface IEditorState {
   scenario: string,
   modalAddOpen: boolean,
   modalDellOpen: boolean,
-  activeSection: string,
+  activeItem: IActiveItem,
 }
+
 
 class Editor extends React.Component<IEditorProps, IEditorState> {
   constructor(props) {
@@ -44,38 +53,15 @@ class Editor extends React.Component<IEditorProps, IEditorState> {
       scenario: '',
       modalAddOpen: false,
       modalDellOpen: false,
-      // listItems: props.screen && getList(props.screen.screenData),
-      activeSection: 'root',
+      activeItem: {
+        parentId: '-1',
+        itemId: 'root',
+      },
     };
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.screen) {
-      // this.setState(() => ({ listItems: getList(nextProps.screen.screenData) }));
-    }
-  }
-
-  addElements = () => {
+  openModalAdd = () => {
     this.setState({ modalAddOpen: true });
-  };
-
-  cancelModal = () => {
-    this.setState({
-      modalAddOpen: false,
-      modalDellOpen: false,
-    });
-  };
-
-  changeScenario = type => (event) => {
-    console.log(type, event.target.checked);
-  };
-
-  onSelectScenario = ({ target }) => {
-    this.setState({ scenario: target.value });
-  };
-
-  onActiveSection = (activeSection) => {
-    this.setState({ activeSection });
   };
 
   openModalDell = () => {
@@ -84,10 +70,17 @@ class Editor extends React.Component<IEditorProps, IEditorState> {
     });
   };
 
+  closeModal = () => {
+    this.setState({
+      modalAddOpen: false,
+      modalDellOpen: false,
+    });
+  };
+
   onConfirmModalAdd = () => {
     const {
       props: { addElement },
-      state: { scenario, activeSection },
+      state: { scenario, activeItem },
     } = this;
 
     const id = `${scenario}${uniqueId()}`;
@@ -98,18 +91,38 @@ class Editor extends React.Component<IEditorProps, IEditorState> {
       children: [],
     };
 
-    addElement(activeSection, newElement);
+    addElement(activeItem.itemId, newElement);
 
     this.setState({
       modalAddOpen: false,
     });
   };
 
-
   onConfirmModalDell = () => {
     const { dellScreen, projectId, screen } = this.props;
 
     dellScreen(projectId, screen.id);
+  };
+
+  onSelectScenario = ({ target }) => {
+    this.setState({ scenario: target.value });
+  };
+
+  onItemActive = (parentId, itemId) => {
+    this.setState({ activeItem: { parentId, itemId } });
+  };
+
+  handleDellElement = () => {
+    const {
+      props: { dellElement },
+      state: { activeItem },
+    } = this;
+
+    if (activeItem.parentId === '-1') return;
+
+    dellElement(activeItem.parentId, activeItem.itemId);
+
+    this.setState({ activeItem: { parentId: '-1', itemId: 'root' } });
   };
 
   updateSortableList: IOnChange = (parent, items) => {
@@ -129,10 +142,15 @@ class Editor extends React.Component<IEditorProps, IEditorState> {
 
   };
 
+  changeScenario = type => (event) => {
+    console.log(type, event.target.checked);
+  };
+
   render() {
     const {
       props: { screen },
       state: {
+        activeItem,
         scenario,
         modalAddOpen,
         modalDellOpen,
@@ -180,28 +198,18 @@ class Editor extends React.Component<IEditorProps, IEditorState> {
                 <Recursive
                   item={screen.listSortable.root}
                   styles={styles}
-                  onChoose={this.onActiveSection}
+                  onChoose={this.onItemActive}
                   onChange={this.updateSortableList}
                 />
               )
             }
           </div>
-          <div className={styles.leftPanel}>
-            <div className={styles.grid}>
-              Grid
-            </div>
-            <div>
-              <Button
-                className={styles.addElements}
-                type="none"
-                onClick={this.addElements}
-                disabled={!screen}
-              >
-                <Icon icon="addCircle" size={36} />
-              </Button>
-            </div>
-            Panel Edit Props
-          </div>
+          <PanelEditProps
+            activeItem={activeItem}
+            disablePanel={typeof screen === 'undefined'}
+            addElement={this.openModalAdd}
+            dellElement={this.handleDellElement}
+          />
         </div>
         {modalDellOpen && (
           <Modal
@@ -209,7 +217,7 @@ class Editor extends React.Component<IEditorProps, IEditorState> {
             confirmText="Delete"
             onConfirm={this.onConfirmModalDell}
             cancelText="Close"
-            onClose={this.cancelModal}
+            onClose={this.closeModal}
           >
             <div className={styles.modal__body}>
               {`Delete Screen: ${screen.name}`}
@@ -222,7 +230,7 @@ class Editor extends React.Component<IEditorProps, IEditorState> {
             confirmText="Add"
             onConfirm={this.onConfirmModalAdd}
             cancelText="Close"
-            onClose={this.cancelModal}
+            onClose={this.closeModal}
           >
             <div className={styles.modal__body}>
               <div className={styles.section}>

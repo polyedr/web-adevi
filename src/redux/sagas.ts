@@ -38,11 +38,11 @@ const mockProject = {
     { id: '2', name: 'test screen - 2' },
   ],
 };
-const mockScreenData = '[{"type":"block","id":3,"children":[{"orientation":"vertical","type":"group","id":6,"children":[{"props":{"width":120,"buoyancy":100,"html_type":"text_title","height":50},"type":"elem","id":7,"children":[]},{"props":{"width":150,"buoyancy":98,"html_type":"text_description","height":40},"type":"elem","id":8,"children":[]}]},{"orientation":"vertical","type":"group","id":7,"children":[{"props":{"width":150,"buoyancy":64,"html_type":"input_firstname","height":80},"type":"elem","id":9,"children":[]},{"props":{"width":150,"buoyancy":61,"html_type":"input_lastname","height":80},"type":"elem","id":10,"children":[]}]},{"orientation":"horizontal","type":"group","id":8,"children":[{"props":{"width":40,"buoyancy":54,"html_type":"select_day","height":20},"type":"elem","id":11,"children":[]},{"props":{"width":40,"buoyancy":54,"html_type":"select_month","height":20},"type":"elem","id":12,"children":[]},{"props":{"width":40,"buoyancy":54,"html_type":"select_year","height":20},"type":"elem","id":13,"children":[]}]},{"orientation":"vertical","type":"group","id":2,"children":[{"props":{"width":150,"buoyancy":10,"html_type":"input_password","height":80},"type":"elem","id":2,"children":[]},{"props":{"width":150,"buoyancy":10,"html_type":"input_password","height":80},"type":"elem","id":3,"children":[]}]},{"orientation":"vertical","type":"group","id":4,"children":[{"props":{"width":150,"buoyancy":1,"html_type":"button_end_composite_scenario","height":80},"type":"elem","id":5,"children":[]}]}]},{"type":"block","id":1,"children":[{"orientation":"vertical","type":"group","id":1,"children":[{"props":{"width":150,"buoyancy":86,"html_type":"input_phone","height":80},"type":"elem","id":0,"children":[]},{"props":{"width":150,"buoyancy":10,"html_type":"input_password","height":80},"type":"elem","id":1,"children":[]}]},{"orientation":"vertical","type":"group","id":3,"children":[{"props":{"width":150,"buoyancy":1,"html_type":"button_end_composite_scenario","height":80},"type":"elem","id":4,"children":[]}]}]},{"type":"block","id":2,"children":[{"orientation":"vertical","type":"group","id":5,"children":[{"props":{"width":100,"buoyancy":2,"html_type":"hyperlink_end simple_scenario","height":80},"type":"elem","id":6,"children":[]}]}]},{"type":"block","id":4,"children":[{"orientation":"vertical","type":"group","id":9,"children":[{"props":{"width":150,"buoyancy":0,"html_type":"button_end simple_scenario","height":80},"type":"elem","id":14,"children":[]}]}]}]';
-// const mockScreenData = '[{"type":"block","id":3,"children":[{"orientation":"vertical","type":"group","id":6,"children":[{"props":{"width":120,"buoyancy":100,"html_type":"text_title","height":50},"type":"elem","id":7,"children":[]},{"props":{"width":150,"buoyancy":98,"html_type":"text_description","height":40},"type":"elem","id":8,"children":[]}]},{"orientation":"horizontal","type":"group","id":4,"children":[{"props":{"width":150,"buoyancy":1,"html_type":"button_end_composite_scenario","height":80},"type":"elem","id":5,"children":[]}]}]}]';
+// const mockScreenData = '[{"type":"block","id":3,"children":[{"orientation":"vertical","type":"group","id":6,"children":[{"props":{"width":120,"buoyancy":100,"html_type":"text_title","height":50},"type":"elem","id":7,"children":[]},{"props":{"width":150,"buoyancy":98,"html_type":"text_description","height":40},"type":"elem","id":8,"children":[]}]},{"orientation":"vertical","type":"group","id":7,"children":[{"props":{"width":150,"buoyancy":64,"html_type":"input_firstname","height":80},"type":"elem","id":9,"children":[]},{"props":{"width":150,"buoyancy":61,"html_type":"input_lastname","height":80},"type":"elem","id":10,"children":[]}]},{"orientation":"horizontal","type":"group","id":8,"children":[{"props":{"width":40,"buoyancy":54,"html_type":"select_day","height":20},"type":"elem","id":11,"children":[]},{"props":{"width":40,"buoyancy":54,"html_type":"select_month","height":20},"type":"elem","id":12,"children":[]},{"props":{"width":40,"buoyancy":54,"html_type":"select_year","height":20},"type":"elem","id":13,"children":[]}]},{"orientation":"vertical","type":"group","id":2,"children":[{"props":{"width":150,"buoyancy":10,"html_type":"input_password","height":80},"type":"elem","id":2,"children":[]},{"props":{"width":150,"buoyancy":10,"html_type":"input_password","height":80},"type":"elem","id":3,"children":[]}]},{"orientation":"vertical","type":"group","id":4,"children":[{"props":{"width":150,"buoyancy":1,"html_type":"button_end_composite_scenario","height":80},"type":"elem","id":5,"children":[]}]}]},{"type":"block","id":1,"children":[{"orientation":"vertical","type":"group","id":1,"children":[{"props":{"width":150,"buoyancy":86,"html_type":"input_phone","height":80},"type":"elem","id":0,"children":[]},{"props":{"width":150,"buoyancy":10,"html_type":"input_password","height":80},"type":"elem","id":1,"children":[]}]},{"orientation":"vertical","type":"group","id":3,"children":[{"props":{"width":150,"buoyancy":1,"html_type":"button_end_composite_scenario","height":80},"type":"elem","id":4,"children":[]}]}]},{"type":"block","id":2,"children":[{"orientation":"vertical","type":"group","id":5,"children":[{"props":{"width":100,"buoyancy":2,"html_type":"hyperlink_end simple_scenario","height":80},"type":"elem","id":6,"children":[]}]}]},{"type":"block","id":4,"children":[{"orientation":"vertical","type":"group","id":9,"children":[{"props":{"width":150,"buoyancy":0,"html_type":"button_end simple_scenario","height":80},"type":"elem","id":14,"children":[]}]}]}]';
+const mockScreenData = '[{"type":"block","id":3,"children":[{"orientation":"vertical","type":"group","id":6,"children":[{"props":{"width":120,"buoyancy":100,"html_type":"text_title","height":50},"type":"elem","id":7,"children":[]},{"props":{"width":150,"buoyancy":98,"html_type":"text_description","height":40},"type":"elem","id":8,"children":[]}]},{"orientation":"horizontal","type":"group","id":4,"children":[{"props":{"width":150,"buoyancy":1,"html_type":"button_end_composite_scenario","height":80},"type":"elem","id":5,"children":[]}]}]}]';
 
 
-export const uniqueId = () => `id${new Date().getTime()}`;
+export const uniqueId = () => new Date().getTime();
 
 // function* loadInitStart() {}
 // function* authCheckSaga() {}
@@ -177,7 +177,7 @@ function* delScreen({ payload }) {
   yield call(getScreen, { payload: { projectId, screenId: lastScreenId } });
 }
 
-function* setlistSortable({ itemSortable }) {
+function* setListSortable({ itemSortable }) {
   const { project: { currentScreen } } = yield select(state => state);
   const newListSortable: IListSortable = { ...currentScreen.listSortable, ...itemSortable };
   const newScreenData: IListScreen[] = getListRevers(newListSortable);
@@ -217,6 +217,27 @@ function* addElement({ payload }) {
   yield put(setScreen(newScreen));
 }
 
+function* dellElement({ payload }) {
+  const { parentId, itemId } = payload;
+  const { project: { currentScreen } } = yield select(state => state);
+
+  const listSortable = {
+    ...R.dissoc(itemId, currentScreen.listSortable),
+    [parentId]: {
+      ...currentScreen.listSortable[parentId],
+      children: currentScreen.listSortable[parentId].children.filter(id => id !== itemId),
+    },
+  };
+
+  const newScreen: IProjectScreen = {
+    ...currentScreen,
+    listSortable,
+    screenData: getListRevers(listSortable),
+  };
+
+  yield put(setScreen(newScreen));
+}
+
 function* mySaga() {
   // yield fork(loadInitStart);
   // yield takeLatest(REHYDRATE, authCheckSaga);
@@ -231,8 +252,9 @@ function* mySaga() {
   yield takeLatest(TYPES.GET_SCREEN, getScreen);
   yield takeLatest(TYPES.DEL_SCREEN, delScreen);
   yield takeLatest(TYPES.ADD_SCREEN, addScreen);
-  yield takeLatest(TYPES.SET_LIST_SORTABLE, setlistSortable);
+  yield takeLatest(TYPES.SET_LIST_SORTABLE, setListSortable);
   yield takeLatest(TYPES.ADD_ELEMENT, addElement);
+  yield takeLatest(TYPES.DELL_ELEMENT, dellElement);
 }
 
 export default mySaga;

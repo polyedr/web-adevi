@@ -38,25 +38,38 @@
     .wrapper {
       flex: 1;
     }
+  }
 
-    .leftPanel {
-      flex: 0 0 240px;
-      background-color: $white;
+  .propsPanel {
+    flex: 0 0 240px;
+    background-color: $white;
 
-      .grid {
-        padding: 8px;
-        border-bottom: 1px solid $matteTurq;
+    .grid {
+      padding: 8px;
+      border-bottom: 1px solid $matteTurq;
+    }
+
+    .addElement {
+      svg * {
+        fill: $dodgerBlue;
       }
 
-      .addElements {
+      &:hover {
         svg * {
-          fill: $dodgerBlue;
+          fill: $frenchBlue;
         }
+      }
+    }
 
-        &:hover {
-          svg * {
-            fill: $frenchBlue;
-          }
+    .activeElement {
+      display: flex;
+      align-items: center;
+
+      button {
+        margin-left: 8px;
+
+        svg * {
+          fill: $red;
         }
       }
     }

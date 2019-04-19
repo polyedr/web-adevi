@@ -18,6 +18,7 @@ export type TSetListSortable = (listSortable: IListSortable) => void;
 export type TSetScreen = (screen: IProjectScreen) => ({ type: string, screen: IProjectScreen });
 export type TSetLoader = (active: boolean) => ({ type: string, active: boolean });
 export type TAddElement = (parentId: string, item: ISortableItem) => void;
+export type TDellElement = (parentId: string, itemId: string) => void;
 // export type ISetScreenData = (screenData: ) => void;
 
 
@@ -94,6 +95,11 @@ export const setScreen: TSetScreen = screen => ({
 export const addElement: TAddElement = (parentId, item) => ({
   type: TYPES.ADD_ELEMENT,
   payload: { parentId, item },
+});
+
+export const dellElement: TDellElement = (parentId, itemId) => ({
+  type: TYPES.DELL_ELEMENT,
+  payload: { parentId, itemId },
 });
 
 // export const setScreenData: ISetScreenData = screenData => ({

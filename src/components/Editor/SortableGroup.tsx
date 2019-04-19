@@ -10,7 +10,7 @@ interface IComponentProps {
   styles: any,
   children?: any,
   onChange: IOnChange,
-  onChoose: (parent: string) => void,
+  onChoose: (itemIndex: string) => void,
 }
 
 const Component: React.FunctionComponent<IComponentProps> = ({
@@ -21,8 +21,8 @@ const Component: React.FunctionComponent<IComponentProps> = ({
   onChoose,
   onChange,
 }) => {
-  const handleChoose = () => {
-    onChoose(parent);
+  const handleChoose = (ent) => {
+    onChoose(ent.oldIndex);
   };
 
   const handleChange = (items: string[], sortable, evt) => {

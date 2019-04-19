@@ -29,6 +29,7 @@ interface IEditorProps {
   dellScreen: typeof actions.dellScreen,
   setScreen: typeof actions.setScreen,
   addElement: typeof actions.addElement,
+  dellElement: typeof actions.dellElement,
   setListSortable: typeof actions.setListSortable,
 }
 
@@ -42,6 +43,7 @@ const EditorLogic: React.FunctionComponent<IEditorProps> = ({
   dellScreen,
   setScreen,
   addElement,
+  dellElement,
   setListSortable,
 }: IEditorProps) => (
   <React.Fragment>
@@ -59,6 +61,7 @@ const EditorLogic: React.FunctionComponent<IEditorProps> = ({
       dellScreen={dellScreen}
       setScreen={setScreen}
       addElement={addElement}
+      dellElement={dellElement}
       setListSortable={setListSortable}
     />
   </React.Fragment>
@@ -76,6 +79,7 @@ const mapDispatchToProps = dispatch => bindActionCreators({
   dellScreen: actions.dellScreen,
   setScreen: actions.setScreen,
   addElement: actions.addElement,
+  dellElement: actions.dellElement,
   setListSortable: actions.setListSortable,
 }, dispatch);
 
